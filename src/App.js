@@ -6,30 +6,10 @@ import {
   TableHead, TableRow,
 } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { useVoting, VOTERS, OPTIONS } from "./votingContext";
 
-const VOTERS = ["Bert", "Birger", "Dave", "Ewoud", "Tom"];
-const OPTIONS = ["Taghazout", "Albanie", "Malta", "FuerteVentura", "Chartreuse (drank)", "Tunesie"];
-
-// Weighted sum elimination ("Borda count"): loser = highest sum.
-function weightedFindLoser(ballots, candidates) {
-  const score = {};
-  candidates.forEach(c => (score[c] = 0));
-  ballots.forEach(ranking => {
-    ranking.forEach((cand, idx) => {
-      if (candidates.includes(cand)) {
-        score[cand] += idx + 1;
-      }
-    });
-  });
-  const maxSum = Math.max(...Object.values(score));
-  const losers = Object.entries(score).filter(([_, v]) => v === maxSum).map(([k]) => k);
-  return {
-    loser: losers.length === 1 ? losers[0] : losers[Math.floor(Math.random() * losers.length)],
-    score,
-  };
-}
-
-function BallotForm({ candidates, onSubmit, voterName }) {
+function BallotForm({ candidates, voterName }) {
+  const { dispatch } = useVoting();
   const [rankings, setRankings] = useState(Array(candidates.length).fill(""));
   const [error, setError] = useState("");
 
@@ -67,7 +47,7 @@ function BallotForm({ candidates, onSubmit, voterName }) {
       return;
     }
     setError("");
-    onSubmit(rankings);
+    dispatch({ type: "SUBMIT_BALLOT", payload: rankings });
   }
 
   return (
@@ -131,87 +111,17 @@ function BallotForm({ candidates, onSubmit, voterName }) {
 }
 
 export default function App() {
-  const [stage, setStage] = useState("setup");
-  const [candidates, setCandidates] = useState([...OPTIONS]);
-  const [round, setRound] = useState(1);
-  const [ballots, setBallots] = useState([]);
-  const [currentBallot, setCurrentBallot] = useState(0);
-
-  // For history/report
-  const [eliminatedHistory, setEliminatedHistory] = useState([]);
-  const [scoreHistory, setScoreHistory] = useState([]);
-  const [loser, setLoser] = useState(null);
-  const [winner, setWinner] = useState(null);
-
-  // Suspense flag for the "And the X is..." screen
-  const [pendingAnnouncement, setPendingAnnouncement] = useState(false);
-
-  function startVoting() {
-    setStage("voting");
-    setCandidates([...OPTIONS]);
-    setBallots([]);
-    setCurrentBallot(0);
-    setRound(1);
-    setEliminatedHistory([]);
-    setScoreHistory([]);
-    setLoser(null);
-    setWinner(null);
-    setPendingAnnouncement(false);
-  }
-
-  // Collecting ballots for the CURRENT round
-  function handleBallotSubmit(rankings) {
-    const updated = [...ballots, rankings];
-    if (currentBallot + 1 < VOTERS.length) {
-      setBallots(updated);
-      setCurrentBallot(currentBallot + 1);
-    } else {
-      setBallots(updated);
-      setPendingAnnouncement(true);
-      setStage("announce");
-    }
-  }
-
-  // Reveal the loser or winner after suspense
-  function revealLoserOrWinner() {
-    const { loser, score } = weightedFindLoser(ballots, candidates);
-    // Final round (two candidates): loser is not the winner
-    if (candidates.length === 2) {
-      setWinner(candidates.find(c => c !== loser));
-      setScoreHistory(hist => [...hist, score]);
-      setEliminatedHistory(hist => [...hist, loser]);
-      setStage("winner");
-    } else {
-      setLoser(loser);
-      setScoreHistory(hist => [...hist, score]);
-      setEliminatedHistory(hist => [...hist, loser]);
-      setStage("eliminated");
-    }
-    setPendingAnnouncement(false);
-  }
-
-  function handleNextRound() {
-    const remain = candidates.filter(c => c !== loser);
-    setCandidates(remain);
-    setBallots([]);
-    setCurrentBallot(0);
-    setRound(r => r + 1);
-    setLoser(null);
-    setStage("voting");
-  }
-
-  function handleReset() {
-    setStage("setup");
-    setCandidates([...OPTIONS]);
-    setRound(1);
-    setBallots([]);
-    setCurrentBallot(0);
-    setEliminatedHistory([]);
-    setScoreHistory([]);
-    setLoser(null);
-    setWinner(null);
-    setPendingAnnouncement(false);
-  }
+  const { state, dispatch } = useVoting();
+  const {
+    stage,
+    candidates,
+    round,
+    currentBallot,
+    eliminatedHistory,
+    scoreHistory,
+    loser,
+    winner,
+  } = state;
 
   const historyArr = eliminatedHistory.map((el, idx) => ({
     round: idx + 1,
@@ -223,6 +133,11 @@ export default function App() {
     candidates.length === 2
       ? "And the winner is..."
       : "And the loser is...";
+
+  const startVoting = () => dispatch({ type: "START_VOTING" });
+  const revealLoserOrWinner = () => dispatch({ type: "REVEAL_RESULT" });
+  const handleNextRound = () => dispatch({ type: "NEXT_ROUND" });
+  const handleReset = () => dispatch({ type: "RESET" });
 
   return (
     <Container maxWidth="sm" sx={{ p: 3 }}>
@@ -309,7 +224,6 @@ export default function App() {
           </Card>
           <BallotForm
             candidates={candidates}
-            onSubmit={handleBallotSubmit}
             voterName={VOTERS[currentBallot]}
           />
         </>

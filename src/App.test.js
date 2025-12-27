@@ -1,8 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import { VotingProvider } from './votingContext';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders voting app title', () => {
+  render(
+    <VotingProvider>
+      <App />
+    </VotingProvider>
+  );
+  const titleElement = screen.getByRole('heading', { name: /🗳️ 2025 pitch voting/i });
+  expect(titleElement).toBeInTheDocument();
 });
