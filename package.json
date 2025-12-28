@@ -1,5 +1,6 @@
 {
-  "name": "pitch-voting",
+  "name": "ranked-choice-voting",
+  "description": "Interactive ranked-choice voting app using Borda count elimination method for fair group decision-making",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
