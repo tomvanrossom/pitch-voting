@@ -1,70 +1,199 @@
-# Getting Started with Create React App
+# 🗳️ Ranked-Choice Voting
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An interactive web application implementing **Borda count elimination** method for fair group decision-making. Built as a learning project focused on modern web development practices and CSS architecture.
 
-## Available Scripts
+![React](https://img.shields.io/badge/React-19.1.0-blue?logo=react)
+![SCSS](https://img.shields.io/badge/SCSS-BEM-pink?logo=sass)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-In the project directory, you can run:
+## 📋 Overview
 
-### `npm start`
+This application enables teams to conduct ranked-choice voting using a weighted sum elimination algorithm (Borda count). Voters rank all candidates in order of preference, and the system eliminates the worst-performing candidate in each round until a winner emerges.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Key Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Multi-round voting system** with progressive elimination
+- **Borda count algorithm** for fair vote weighting
+- **Interactive ballot forms** with duplicate prevention
+- **Visual progress tracking** with stepper component
+- **Detailed results table** showing all rounds and scores
+- **Suspense reveals** for engagement
+- **Modern CSS architecture** using SCSS + BEM + Design Tokens
 
-### `npm test`
+## 🎯 Project Goals
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This project serves as a **learning platform** for:
 
-### `npm run build`
+- Modern React patterns (Hooks, Context API, useReducer)
+- CSS layout techniques (Flexbox, Grid)
+- SCSS architecture and BEM methodology
+- Design system implementation with tokens
+- State management patterns
+- Test-driven development
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🏗️ Architecture
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### State Management
+- **Context API + useReducer** for centralized state
+- Action-based state updates (START_VOTING, SUBMIT_BALLOT, REVEAL_RESULT, etc.)
+- Business logic separated from UI components
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### CSS Architecture
+- **Design Tokens** (`_tokens.scss`) - Colors, spacing, typography, shadows
+- **Mixins Library** (`_mixins.scss`) - Reusable patterns (flexbox helpers, card patterns, button styles)
+- **Component-based SCSS** - Each component has its own scoped styles
+- **BEM naming convention** - `.block__element--modifier` pattern
+- **No CSS frameworks** - Hand-written layouts using Flexbox and Grid
 
-### `npm run eject`
+### Project Structure
+```
+src/
+├── styles/
+│   ├── _tokens.scss       # Design system tokens
+│   ├── _mixins.scss       # Reusable SCSS mixins
+│   └── global.scss        # Global base styles
+├── components/
+│   ├── Chip.js            # Reusable badge component
+│   └── Chip.scss          # Chip styles
+├── App.js                 # Main application component
+├── App.scss               # Main app styles (BEM)
+├── BallotForm.js          # Voting form component
+├── BallotForm.scss        # Ballot form styles
+├── votingContext.js       # State management (Context + Reducer)
+└── index.js               # App entry point
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🚀 Getting Started
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Installation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/ranked-choice-voting.git
+cd ranked-choice-voting
+```
 
-## Learn More
+2. Install dependencies
+```bash
+npm install
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Start the development server
+```bash
+npm start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-### Code Splitting
+### Running Tests
+```bash
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Building for Production
+```bash
+npm run build
+```
 
-### Analyzing the Bundle Size
+## 🎮 How to Use
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. **Setup Phase**: Review voters and candidates
+2. **Voting Rounds**: Each voter ranks all remaining candidates
+3. **Elimination**: After each round, the lowest-scoring candidate is eliminated
+4. **Winner Declaration**: Process continues until only one candidate remains
+5. **Results Summary**: View detailed scoring history for all rounds
 
-### Making a Progressive Web App
+## 🧮 Voting Algorithm
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The app uses **Borda count elimination**:
 
-### Advanced Configuration
+1. Each voter ranks candidates from best to worst (1st place, 2nd place, etc.)
+2. Scores are calculated: 1st place = 1 point, 2nd place = 2 points, etc.
+3. The candidate with the **highest total score** (worst ranking) is eliminated
+4. Repeat with remaining candidates until a winner emerges
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+This method ensures majority preferences are respected while avoiding issues like vote splitting.
 
-### Deployment
+## 🎨 CSS Learning Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+This project demonstrates modern CSS techniques:
 
-### `npm run build` fails to minify
+### Flexbox Examples
+- **Card layouts**: `display: flex; gap: 1rem;`
+- **Centered content**: `justify-content: center; align-items: center;`
+- **Form fields**: `flex-direction: column;`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Grid Examples
+- **Stepper component**: `grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));`
+- **Responsive table**: Overflow handling with grid
+
+### BEM Naming
+```scss
+.ballot-form { }                    // Block
+.ballot-form__title { }             // Element
+.ballot-form__select--error { }     // Modifier
+```
+
+### Design Tokens
+```scss
+$color-primary: #1976d2;
+$spacing-md: 1.5rem;
+$font-size-xl: 1.25rem;
+$shadow-sm: 0px 2px 1px -1px rgba(0,0,0,0.2);
+```
+
+## 📚 Documentation
+
+- [CSS Migration Summary](./CSS_MIGRATION_SUMMARY.md) - Detailed CSS architecture documentation
+- [Design Tokens](./ src/styles/_tokens.scss) - Complete token reference
+- [Mixins Library](./src/styles/_mixins.scss) - Reusable SCSS patterns
+
+## 🛠️ Technologies
+
+- **React 19.1.0** - UI library
+- **Sass (SCSS)** - CSS preprocessor
+- **Context API + useReducer** - State management
+- **React Testing Library** - Component testing
+- **Create React App** - Build tooling
+
+## 🎓 Learning Resources
+
+If you're using this project to learn, explore:
+
+1. **State Management**: `votingContext.js` - See reducer pattern in action
+2. **CSS Architecture**: `src/styles/` - Study token system and mixins
+3. **BEM Methodology**: All `.scss` files - Consistent naming patterns
+4. **Flexbox**: `App.scss` - Various flex layouts
+5. **Grid**: `.stepper` class - Responsive grid example
+6. **Component Design**: `BallotForm.js` - Form validation and state
+
+## 🤝 Contributing
+
+This is a learning project, but contributions are welcome! Feel free to:
+
+- Report bugs or issues
+- Suggest new features
+- Improve documentation
+- Submit pull requests
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👏 Acknowledgments
+
+- Borda count voting method for fair elimination
+- React community for excellent documentation
+- SCSS/BEM best practices from CSS architecture guides
+
+## 📧 Contact
+
+For questions or feedback about this learning project, please open an issue on GitHub.
+
+---
+
+**Note**: This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and has been enhanced with modern CSS architecture and state management patterns for educational purposes.
