@@ -1,0 +1,22 @@
+@import '../../../styles/tokens';
+
+.card {
+  background-color: white;
+  border-radius: $radius-lg;
+  
+  &--shadow {
+    box-shadow: $shadow-md;
+  }
+  
+  &--padding-small {
+    padding: $spacing-sm;
+  }
+  
+  &--padding-medium {
+    padding: $spacing-md;
+  }
+  
+  &--padding-large {
+    padding: $spacing-lg;
+  }
+}

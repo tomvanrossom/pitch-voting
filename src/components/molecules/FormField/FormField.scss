@@ -1,0 +1,16 @@
+@import '../../../styles/tokens';
+
+.form-field {
+  margin-bottom: $spacing-md;
+  
+  &__input {
+    display: block;
+  }
+  
+  &__error {
+    margin-top: $spacing-xs;
+    color: $color-error;
+    font-size: $font-size-sm;
+    font-weight: 500;
+  }
+}

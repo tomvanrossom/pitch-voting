@@ -1,0 +1,21 @@
+@import '../../../styles/tokens';
+
+.icon {
+  display: inline-block;
+  
+  &--small {
+    font-size: $font-size-base;
+  }
+  
+  &--medium {
+    font-size: $font-size-lg;
+  }
+  
+  &--large {
+    font-size: $font-size-xl;
+  }
+  
+  &--xl {
+    font-size: $font-size-3xl;
+  }
+}

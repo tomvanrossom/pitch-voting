@@ -1,0 +1,49 @@
+@import '../styles/tokens';
+@import '../styles/mixins';
+
+// Voting Stage
+.voting {
+  &__voter-title {
+    font-size: $font-size-2xl;
+    color: white;
+    text-align: center;
+    margin-bottom: $spacing-md;
+  }
+}
+
+// Announce Card
+.announce {
+  @include card;
+  max-width: 600px;
+  margin: 0 auto;
+
+  &__content {
+    @include flex-column;
+    align-items: center;
+    padding: $spacing-lg 0;
+    gap: $spacing-lg;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    text-align: center;
+  }
+}
+
+// Result Cards
+.result {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+
+  &__summary {
+    margin-top: $spacing-lg;
+  }
+
+  &__summary-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
+    margin-bottom: $spacing-md;
+    text-align: center;
+  }
+}

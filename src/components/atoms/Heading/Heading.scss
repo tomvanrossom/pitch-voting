@@ -1,0 +1,40 @@
+@import '../../../styles/tokens';
+
+.heading {
+  color: $color-text-primary;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.2;
+  
+  &--h1 {
+    font-size: $font-size-3xl;
+  }
+  
+  &--h2 {
+    font-size: $font-size-2xl;
+  }
+  
+  &--h3 {
+    font-size: $font-size-xl;
+  }
+  
+  &--h4 {
+    font-size: $font-size-lg;
+  }
+  
+  &--xl {
+    font-size: $font-size-3xl;
+  }
+  
+  &--lg {
+    font-size: $font-size-2xl;
+  }
+  
+  &--md {
+    font-size: $font-size-xl;
+  }
+  
+  &--sm {
+    font-size: $font-size-lg;
+  }
+}

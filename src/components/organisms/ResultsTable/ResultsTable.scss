@@ -1,0 +1,46 @@
+@import '../../../styles/tokens';
+
+.results-table {
+  margin: $spacing-lg 0;
+  
+  &__container {
+    overflow-x: auto;
+    border-radius: $radius-md;
+    box-shadow: $shadow-sm;
+  }
+  
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+  
+  &__header {
+    background-color: $color-surface;
+  }
+  
+  &__row {
+    &:not(:last-child) {
+      border-bottom: 1px solid $color-border;
+    }
+    
+    &:hover {
+      background-color: lighten($color-primary, 47%);
+    }
+  }
+  
+  &__cell {
+    padding: $spacing-sm $spacing-md;
+    text-align: left;
+    
+    &--header {
+      font-weight: 600;
+      color: $color-text-primary;
+      text-align: center;
+    }
+    
+    &:first-child {
+      font-weight: 500;
+    }
+  }
+}

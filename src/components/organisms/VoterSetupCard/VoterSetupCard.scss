@@ -1,0 +1,22 @@
+@import '../../../styles/tokens';
+
+.voter-setup-card {
+  max-width: 600px;
+  margin: 0 auto;
+  
+  &__section {
+    margin-bottom: $spacing-lg;
+    
+    &:last-of-type {
+      margin-bottom: $spacing-xl;
+    }
+    
+    h3 {
+      margin-bottom: $spacing-md;
+    }
+    
+    p {
+      margin-bottom: $spacing-sm;
+    }
+  }
+}

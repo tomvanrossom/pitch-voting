@@ -1,0 +1,14 @@
+@import '../../../styles/tokens';
+
+.label {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+  
+  &__required {
+    color: $color-error;
+    margin-left: $spacing-xs;
+  }
+}

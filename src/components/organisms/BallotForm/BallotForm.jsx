@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useVoting } from "../votingContext.jsx";
+import { useVoting } from "../../../context/votingContext.jsx";
+import { Card } from "../../molecules/Card/Card";
+import { FormField } from "../../molecules/FormField/FormField";
+import { Button } from "../../atoms/Button/Button";
+import { Heading } from "../../atoms/Heading/Heading";
 import "./BallotForm.scss";
 
 function BallotForm({ candidates, voterName }) {
@@ -43,8 +47,10 @@ function BallotForm({ candidates, voterName }) {
   }
 
   return (
-    <div className="ballot-form">
-      <h2 className="ballot-form__title">{voterName}'s Ballot</h2>
+    <Card className="ballot-form" padding="large">
+      <Heading level={2} className="ballot-form__title">
+        {voterName}'s Ballot
+      </Heading>
       <form onSubmit={handleSubmit}>
         <div className="ballot-form__fields">
           {Array.from({ length: candidates.length }).map((_, rankIdx) => {
@@ -87,16 +93,17 @@ function BallotForm({ candidates, voterName }) {
               {error}
             </div>
           )}
-          <button 
-            type="submit" 
-            className="ballot-form__submit"
+          <Button 
+            type="submit"
+            size="large"
+            fullWidth
             aria-label={`Submit ballot for ${voterName}`}
           >
             Submit Ballot
-          </button>
+          </Button>
         </div>
       </form>
-    </div>
+    </Card>
   );
 }
 

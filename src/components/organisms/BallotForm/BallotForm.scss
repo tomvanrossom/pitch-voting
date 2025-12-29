@@ -1,8 +1,7 @@
-@import '../styles/tokens';
-@import '../styles/mixins';
+@import '../../../styles/tokens';
+@import '../../../styles/mixins';
 
 .ballot-form {
-  @include card($shadow-md);
   margin: $spacing-md 0;
 
   &__title {
@@ -68,18 +67,5 @@
     color: $color-error;
     font-size: $font-size-sm;
     margin-top: $spacing-xs;
-  }
-
-  &__submit {
-    @include button-base;
-    background: $color-primary;
-    color: white;
-    margin-top: $spacing-sm;
-    align-self: center;
-    padding: $spacing-sm $spacing-lg;
-
-    &:hover {
-      background: $color-primary-dark;
-    }
   }
 }

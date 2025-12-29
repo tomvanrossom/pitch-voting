@@ -1,0 +1,20 @@
+@import '../../../styles/tokens';
+
+.voting-info-panel {
+  margin: $spacing-lg 0;
+  
+  &__section {
+    margin-bottom: $spacing-md;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__label {
+    margin-bottom: $spacing-sm;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $color-text-secondary;
+  }
+}

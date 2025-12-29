@@ -1,0 +1,8 @@
+@import '../../../styles/tokens';
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  align-items: center;
+}

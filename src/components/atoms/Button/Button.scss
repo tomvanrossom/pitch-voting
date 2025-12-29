@@ -1,0 +1,71 @@
+@import '../../../styles/tokens';
+@import '../../../styles/mixins';
+
+.btn {
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-base;
+  font-weight: 500;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: $shadow-md;
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  &--primary {
+    background-color: $color-primary;
+    color: white;
+    box-shadow: $shadow-sm;
+    
+    &:hover:not(:disabled) {
+      background-color: $color-primary-dark;
+    }
+  }
+  
+  &--secondary {
+    background-color: $color-secondary;
+    color: white;
+    box-shadow: $shadow-sm;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($color-secondary, 10%);
+    }
+  }
+  
+  &--success {
+    background-color: $color-success;
+    color: white;
+    box-shadow: $shadow-sm;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($color-success, 10%);
+    }
+  }
+  
+  &--small {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+  }
+  
+  &--large {
+    padding: $spacing-md $spacing-lg;
+    font-size: $font-size-lg;
+  }
+  
+  &--full-width {
+    width: 100%;
+  }
+}
