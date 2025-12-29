@@ -1,11 +1,11 @@
 import React from "react";
 import { useVoting, VOTERS } from "../context/votingContext.jsx";
 import { VotingLayout } from "../components/templates/VotingLayout/VotingLayout";
-import { SetupPage } from "./SetupPage";
-import { VotingPage } from "./VotingPage";
-import { AnnouncePage } from "./AnnouncePage";
-import { EliminatedPage } from "./EliminatedPage";
-import { WinnerPage } from "./WinnerPage";
+import { Setup } from "./Setup";
+import { Voting } from "./Voting";
+import { Announce } from "./Announce";
+import { Eliminated } from "./Eliminated";
+import { Winner } from "./Winner";
 
 export default function App() {
   const { state } = useVoting();
@@ -22,11 +22,11 @@ export default function App() {
 
   return (
     <VotingLayout stageInfo={getStageInfo()}>
-      {stage === "setup" && <SetupPage />}
-      {stage === "voting" && <VotingPage />}
-      {stage === "announce" && <AnnouncePage />}
-      {stage === "eliminated" && <EliminatedPage />}
-      {stage === "winner" && <WinnerPage />}
+      {stage === "setup" && <Setup />}
+      {stage === "voting" && <Voting />}
+      {stage === "announce" && <Announce />}
+      {stage === "eliminated" && <Eliminated />}
+      {stage === "winner" && <Winner />}
     </VotingLayout>
   );
 }
