@@ -64,6 +64,8 @@ function BallotForm({ candidates, voterName }) {
                   value={rankings[rankIdx]}
                   onChange={e => onChange(e, rankIdx)}
                   required
+                  aria-describedby={error ? `ballot-error-${voterName}` : undefined}
+                  aria-invalid={error ? "true" : "false"}
                 >
                   <option value="">Select candidate...</option>
                   {available.map(c => (
@@ -76,11 +78,20 @@ function BallotForm({ candidates, voterName }) {
             );
           })}
           {error && (
-            <div className="ballot-form__error">
+            <div 
+              className="ballot-form__error"
+              role="alert"
+              id={`ballot-error-${voterName}`}
+              aria-live="assertive"
+            >
               {error}
             </div>
           )}
-          <button type="submit" className="ballot-form__submit">
+          <button 
+            type="submit" 
+            className="ballot-form__submit"
+            aria-label={`Submit ballot for ${voterName}`}
+          >
             Submit Ballot
           </button>
         </div>

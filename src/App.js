@@ -39,8 +39,17 @@ export default function App() {
         <h1 className="app__title">🗳️ 2025 Pitch Voting</h1>
       </header>
 
-      {/* Setup */}
-      {stage === "setup" && (
+      <main id="main-content" role="main">
+        <div aria-live="polite" aria-atomic="true" className="sr-only">
+          {stage === "setup" && "Voting setup screen"}
+          {stage === "voting" && `Voting round ${round}, ${VOTERS[currentBallot]}'s turn`}
+          {stage === "announce" && "Preparing to reveal results"}
+          {stage === "eliminated" && `${loser} has been eliminated`}
+          {stage === "winner" && `${winner} is the winner`}
+        </div>
+
+        {/* Setup */}
+        {stage === "setup" && (
         <div className="setup-card">
           <div className="setup-card__section">
             <h2 className="setup-card__heading">Voters</h2>
@@ -67,14 +76,15 @@ export default function App() {
           <button
             className="setup-card__button"
             onClick={startVoting}
+            aria-label="Start the voting process with all voters and candidates"
           >
             Start Voting
           </button>
         </div>
-      )}
+        )}
 
-      {/* Voting round */}
-      {stage === "voting" && (
+        {/* Voting round */}
+        {stage === "voting" && (
         <div className="voting">
           <h2 className="voting__voter-title">
             {VOTERS[currentBallot]}'s turn to vote
@@ -125,25 +135,26 @@ export default function App() {
             voterName={VOTERS[currentBallot]}
           />
         </div>
-      )}
+        )}
 
-      {/* Suspense announcement */}
-      {stage === "announce" && (
+        {/* Suspense announcement */}
+        {stage === "announce" && (
         <div className="announce">
           <div className="announce__content">
             <h2 className="announce__title">{suspenseText}</h2>
             <button
               className="announce__button"
               onClick={revealLoserOrWinner}
+              aria-label={`Reveal ${candidates.length === 2 ? 'the winner' : 'the eliminated candidate'} for this round`}
             >
               Reveal
             </button>
           </div>
         </div>
-      )}
+        )}
 
-      {/* After Reveal, show loser */}
-      {stage === "eliminated" && (
+        {/* After Reveal, show loser */}
+        {stage === "eliminated" && (
         <div className="result">
           <div className="result__alert result__alert--warning">
             Eliminated this round: <strong>{loser}</strong>
@@ -151,14 +162,15 @@ export default function App() {
           <button
             className="result__button"
             onClick={handleNextRound}
+            aria-label={`Proceed to round ${round + 1} of voting`}
           >
             Next Round
           </button>
         </div>
-      )}
+        )}
 
-      {/* Winner screen */}
-      {stage === "winner" && (
+        {/* Winner screen */}
+        {stage === "winner" && (
         <div className="result">
           <div className="result__alert result__alert--success">
             🏆 <strong>Winner: {winner}</strong>
@@ -170,12 +182,15 @@ export default function App() {
             </h3>
             <div className="table__container">
               <table className="table">
+                <caption className="sr-only">
+                  Round-by-round elimination results and weighted scores for each candidate
+                </caption>
                 <thead className="table__header">
                   <tr className="table__row">
-                    <th className="table__cell table__cell--header">Round</th>
-                    <th className="table__cell table__cell--header">Eliminated</th>
+                    <th scope="col" className="table__cell table__cell--header">Round</th>
+                    <th scope="col" className="table__cell table__cell--header">Eliminated</th>
                     {OPTIONS.map(c => (
-                      <th key={c} className="table__cell table__cell--header">
+                      <th scope="col" key={c} className="table__cell table__cell--header">
                         Score: {c}
                       </th>
                     ))}
@@ -184,7 +199,7 @@ export default function App() {
                 <tbody>
                   {historyArr.map((h, idx) => (
                     <tr key={idx} className="table__row">
-                      <td className="table__cell">{h.round}</td>
+                      <th scope="row" className="table__cell">{h.round}</th>
                       <td className="table__cell">
                         <Chip label={h.eliminated} color="error" size="small" />
                       </td>
@@ -196,7 +211,7 @@ export default function App() {
                     </tr>
                   ))}
                   <tr className="table__row">
-                    <td className="table__cell"><strong>Winner</strong></td>
+                    <th scope="row" className="table__cell"><strong>Winner</strong></th>
                     <td className="table__cell">
                       <Chip label={winner} color="success" size="small" />
                     </td>
@@ -212,11 +227,13 @@ export default function App() {
           <button
             className="result__button result__button--success"
             onClick={handleReset}
+            aria-label="Restart the voting process from the beginning"
           >
             🏆 Restart
           </button>
         </div>
-      )}
+        )}
+      </main>
 
       <footer className="app__footer">
         <p>&copy; {new Date().getFullYear()} 2025 Pitch Voting - Built with React & SCSS</p>
