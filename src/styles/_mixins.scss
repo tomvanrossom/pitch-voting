@@ -1,5 +1,5 @@
 // Reusable SCSS Mixins
-@import './tokens';
+@use './tokens' as *;
 
 // Media query helpers
 @mixin breakpoint($size) {

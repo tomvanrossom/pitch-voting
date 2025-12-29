@@ -1,4 +1,5 @@
-@import '../../../styles/tokens';
+@use 'sass:color';
+@use '../../../styles/tokens' as *;
 
 .alert {
   padding: $spacing-md $spacing-lg;
@@ -9,26 +10,26 @@
   margin: $spacing-md 0;
   
   &--success {
-    background-color: lighten($color-success, 40%);
-    color: darken($color-success, 20%);
+    background-color: color.scale($color-success, $lightness: 60%);
+    color: color.scale($color-success, $lightness: -60%);
     border: 2px solid $color-success;
   }
   
   &--warning {
-    background-color: lighten($color-warning, 35%);
-    color: darken($color-warning, 25%);
+    background-color: color.scale($color-warning, $lightness: 66%);
+    color: color.scale($color-warning, $lightness: -53%);
     border: 2px solid $color-warning;
   }
   
   &--error {
-    background-color: lighten($color-error, 40%);
-    color: darken($color-error, 10%);
+    background-color: color.scale($color-error, $lightness: 81%);
+    color: color.scale($color-error, $lightness: -30%);
     border: 2px solid $color-error;
   }
   
   &--info {
-    background-color: lighten($color-primary, 45%);
-    color: darken($color-primary, 10%);
+    background-color: color.scale($color-primary, $lightness: 87%);
+    color: color.scale($color-primary, $lightness: -30%);
     border: 2px solid $color-primary;
   }
 }

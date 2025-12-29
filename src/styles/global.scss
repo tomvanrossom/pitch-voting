@@ -1,5 +1,5 @@
-@import './tokens';
-@import './mixins';
+@use './tokens' as *;
+@use './mixins' as *;
 
 * {
   box-sizing: border-box;

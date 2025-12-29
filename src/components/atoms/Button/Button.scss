@@ -1,5 +1,6 @@
-@import '../../../styles/tokens';
-@import '../../../styles/mixins';
+@use 'sass:color';
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
 
 .btn {
   padding: $spacing-sm $spacing-md;
@@ -41,7 +42,7 @@
     box-shadow: $shadow-sm;
     
     &:hover:not(:disabled) {
-      background-color: darken($color-secondary, 10%);
+      background-color: color.scale($color-secondary, $lightness: -24%);
     }
   }
   
@@ -51,7 +52,7 @@
     box-shadow: $shadow-sm;
     
     &:hover:not(:disabled) {
-      background-color: darken($color-success, 10%);
+      background-color: color.scale($color-success, $lightness: -30%);
     }
   }
   

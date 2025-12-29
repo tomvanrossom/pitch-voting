@@ -1,4 +1,4 @@
-@import '../../../styles/tokens';
+@use '../../../styles/tokens' as *;
 
 .select {
   padding: $spacing-sm $spacing-md;

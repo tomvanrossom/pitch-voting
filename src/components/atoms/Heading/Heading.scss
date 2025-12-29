@@ -1,4 +1,4 @@
-@import '../../../styles/tokens';
+@use '../../../styles/tokens' as *;
 
 .heading {
   color: $color-text-primary;
