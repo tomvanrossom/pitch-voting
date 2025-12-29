@@ -50,16 +50,18 @@ export default function App() {
 
         {/* Setup */}
         {stage === "setup" && (
-        <div className="setup-card">
-          <div className="setup-card__section">
-            <h2 className="setup-card__heading">Voters</h2>
+        <section className="setup-card" aria-labelledby="setup-heading">
+          <h2 id="setup-heading" className="sr-only">Voting Setup</h2>
+          <section className="setup-card__section" aria-labelledby="voters-heading">
+            <h3 id="voters-heading" className="setup-card__heading">Voters</h3>
             <div className="setup-card__chips">
               {VOTERS.map(v => (
                 <Chip label={v} key={v} color="secondary" />
               ))}
             </div>
-          </div>
-          <div className="setup-card__section">
+          </section>
+          <section className="setup-card__section" aria-labelledby="candidates-heading">
+            <h3 id="candidates-heading" className="sr-only">Candidates</h3>
             <p><strong>Candidates:</strong></p>
             <div className="setup-card__chips">
               {OPTIONS.map(c => (
@@ -72,7 +74,7 @@ export default function App() {
                 />
               ))}
             </div>
-          </div>
+          </section>
           <button
             className="setup-card__button"
             onClick={startVoting}
@@ -80,68 +82,72 @@ export default function App() {
           >
             Start Voting
           </button>
-        </div>
+        </section>
         )}
 
         {/* Voting round */}
         {stage === "voting" && (
-        <div className="voting">
-          <h2 className="voting__voter-title">
+        <section className="voting" aria-labelledby="voting-title">
+          <h2 id="voting-title" className="voting__voter-title">
             {VOTERS[currentBallot]}'s turn to vote
           </h2>
           
-          <div className="stepper">
+          <nav className="stepper" aria-label="Voting rounds progress">
+            <ol className="stepper__list">
             {Array.from({ length: OPTIONS.length - 1 }).map((_, idx) => (
-              <div 
+              <li 
                 key={idx} 
                 className={`stepper__step ${idx + 1 === round ? 'stepper__step--active' : ''} ${idx + 1 < round ? 'stepper__step--completed' : ''}`}
+                aria-current={idx + 1 === round ? 'step' : undefined}
               >
-                <div className="stepper__step-circle">{idx + 1}</div>
-                <div className="stepper__step-label">
+                <span className="stepper__step-circle">{idx + 1}</span>
+                <span className="stepper__step-label">
                   Round {idx + 1}
                   {idx < eliminatedHistory.length && (
-                    <div>
+                    <span>
                       <Chip
                         label={`✗ ${eliminatedHistory[idx]}`}
                         size="small"
                         color="error"
                       />
-                    </div>
+                    </span>
                   )}
-                </div>
-              </div>
+                </span>
+              </li>
             ))}
-          </div>
+            </ol>
+          </nav>
 
-          <div className="voting__info-card">
-            <div className="voting__info-section">
-              <span className="voting__label">Remaining:</span>
+          <aside className="voting__info-card" aria-labelledby="voting-status">
+            <h3 id="voting-status" className="sr-only">Voting Status</h3>
+            <section className="voting__info-section" aria-labelledby="remaining-label">
+              <h4 id="remaining-label" className="voting__label">Remaining:</h4>
               {candidates.map(c => (
                 <Chip key={c} label={c} color="primary" />
               ))}
-            </div>
-            <div className="voting__info-section">
-              <span className="voting__label">Eliminated:</span>
+            </section>
+            <section className="voting__info-section" aria-labelledby="eliminated-label">
+              <h4 id="eliminated-label" className="voting__label">Eliminated:</h4>
               {eliminatedHistory.length === 0
                 ? <Chip label="None" size="small" />
                 : eliminatedHistory.map(c => (
                     <Chip key={c} label={c} color="error" size="small" />
                   ))}
-            </div>
-          </div>
+            </section>
+          </aside>
 
           <BallotForm
             candidates={candidates}
             voterName={VOTERS[currentBallot]}
           />
-        </div>
+        </section>
         )}
 
         {/* Suspense announcement */}
         {stage === "announce" && (
-        <div className="announce">
+        <section className="announce" aria-labelledby="announce-title">
           <div className="announce__content">
-            <h2 className="announce__title">{suspenseText}</h2>
+            <h2 id="announce-title" className="announce__title">{suspenseText}</h2>
             <button
               className="announce__button"
               onClick={revealLoserOrWinner}
@@ -150,15 +156,16 @@ export default function App() {
               Reveal
             </button>
           </div>
-        </div>
+        </section>
         )}
 
         {/* After Reveal, show loser */}
         {stage === "eliminated" && (
-        <div className="result">
-          <div className="result__alert result__alert--warning">
+        <article className="result" aria-labelledby="eliminated-heading">
+          <h2 id="eliminated-heading" className="sr-only">Round Result</h2>
+          <output className="result__alert result__alert--warning" aria-live="polite">
             Eliminated this round: <strong>{loser}</strong>
-          </div>
+          </output>
           <button
             className="result__button"
             onClick={handleNextRound}
@@ -166,18 +173,19 @@ export default function App() {
           >
             Next Round
           </button>
-        </div>
+        </article>
         )}
 
         {/* Winner screen */}
         {stage === "winner" && (
-        <div className="result">
-          <div className="result__alert result__alert--success">
+        <article className="result" aria-labelledby="winner-heading">
+          <h2 id="winner-heading" className="sr-only">Final Results</h2>
+          <output className="result__alert result__alert--success" aria-live="polite">
             🏆 <strong>Winner: {winner}</strong>
-          </div>
+          </output>
           
-          <div className="result__summary">
-            <h3 className="result__summary-title">
+          <section className="result__summary" aria-labelledby="summary-title">
+            <h3 id="summary-title" className="result__summary-title">
               Voting summary (elimination order and weighted scores)
             </h3>
             <div className="table__container">
@@ -222,7 +230,7 @@ export default function App() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </section>
 
           <button
             className="result__button result__button--success"
@@ -231,7 +239,7 @@ export default function App() {
           >
             🏆 Restart
           </button>
-        </div>
+        </article>
         )}
       </main>
 

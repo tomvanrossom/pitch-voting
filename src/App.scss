@@ -108,10 +108,16 @@
 
 // Stepper
 .stepper {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: $spacing-sm;
   padding: $spacing-sm 0;
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: $spacing-sm;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
   &__step {
     @include flex-column;
