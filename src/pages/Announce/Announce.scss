@@ -1,0 +1,18 @@
+@use '../../styles/tokens' as *;
+@use '../../styles/mixins' as *;
+
+.announce {
+  max-width: 600px;
+  margin: 0 auto;
+
+  &__card {
+    @include flex-column;
+    align-items: center;
+    gap: $spacing-lg;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    text-align: center;
+  }
+}
