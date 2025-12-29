@@ -3,6 +3,7 @@
 An interactive web application implementing **Borda count elimination** method for fair group decision-making. Built as a learning project focused on modern web development practices and CSS architecture.
 
 ![React](https://img.shields.io/badge/React-19.1.0-blue?logo=react)
+![Vite](https://img.shields.io/badge/Vite-7.3.0-646CFF?logo=vite)
 ![SCSS](https://img.shields.io/badge/SCSS-BEM-pink?logo=sass)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -84,7 +85,7 @@ npm install
 
 3. Start the development server
 ```bash
-npm start
+npm run dev
 ```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
@@ -97,6 +98,11 @@ npm test
 ### Building for Production
 ```bash
 npm run build
+```
+
+### Preview Production Build
+```bash
+npm run preview
 ```
 
 ## 🎮 How to Use
@@ -155,10 +161,11 @@ $shadow-sm: 0px 2px 1px -1px rgba(0,0,0,0.2);
 ## 🛠️ Technologies
 
 - **React 19.1.0** - UI library
+- **Vite 7.3.0** - Modern build tool and dev server
 - **Sass (SCSS)** - CSS preprocessor
 - **Context API + useReducer** - State management
+- **Vitest** - Fast unit testing framework
 - **React Testing Library** - Component testing
-- **Create React App** - Build tooling
 
 ## 🎓 Learning Resources
 
@@ -196,4 +203,4 @@ For questions or feedback about this learning project, please open an issue on G
 
 ---
 
-**Note**: This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and has been enhanced with modern CSS architecture and state management patterns for educational purposes.
+**Note**: This project uses [Vite](https://vite.dev/) for lightning-fast development and optimized production builds, with modern CSS architecture and state management patterns for educational purposes.

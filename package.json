@@ -3,32 +3,32 @@
   "description": "Interactive ranked-choice voting app using Borda count elimination method for fair group decision-making",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^7.1.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "sass": "^1.97.1",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-scripts": "5.0.1",
-    "sass": "^1.97.1",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "vite": "^7.3.0",
+    "vite-plugin-sass": "^0.1.0",
+    "vitest": "^2.1.8"
   },
   "browserslist": {
     "production": [
