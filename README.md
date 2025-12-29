@@ -53,12 +53,12 @@ src/
 │   ├── _mixins.scss       # Reusable SCSS mixins
 │   └── global.scss        # Global base styles
 ├── components/
+│   ├── BallotForm.js      # Voting form component
+│   ├── BallotForm.scss    # Ballot form styles
 │   ├── Chip.js            # Reusable badge component
 │   └── Chip.scss          # Chip styles
 ├── App.js                 # Main application component
 ├── App.scss               # Main app styles (BEM)
-├── BallotForm.js          # Voting form component
-├── BallotForm.scss        # Ballot form styles
 ├── votingContext.js       # State management (Context + Reducer)
 └── index.js               # App entry point
 ```
