@@ -1,0 +1,12 @@
+@use '../../styles/tokens' as *;
+
+.eliminated-page {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  align-items: center;
+}

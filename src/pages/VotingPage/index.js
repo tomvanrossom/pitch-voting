@@ -1,0 +1,1 @@
+export { VotingPage } from './VotingPage';
