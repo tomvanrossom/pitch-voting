@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
-import { VotingProvider } from './votingContext';
+import App from './App.jsx';
+import { VotingProvider } from './votingContext.jsx';
 
 test('renders voting app title', () => {
   render(

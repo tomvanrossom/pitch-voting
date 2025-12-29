@@ -1,7 +1,7 @@
 import React from "react";
-import { useVoting, VOTERS, OPTIONS } from "./votingContext";
-import { Chip } from "./components/Chip";
-import BallotForm from "./components/BallotForm";
+import { useVoting, VOTERS, OPTIONS } from "./votingContext.jsx";
+import { Chip } from "./components/Chip.jsx";
+import BallotForm from "./components/BallotForm.jsx";
 import "./App.scss";
 
 export default function App() {

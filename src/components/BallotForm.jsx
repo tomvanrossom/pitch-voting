@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useVoting } from "../votingContext";
+import { useVoting } from "../votingContext.jsx";
 import "./BallotForm.scss";
 
 function BallotForm({ candidates, voterName }) {
