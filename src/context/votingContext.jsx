@@ -1,26 +1,8 @@
 import React, { createContext, useContext, useReducer } from "react";
+import { weightedFindLoser } from "../utils/votingUtils";
 
 const VOTERS = ["Bert", "Birger", "Dave", "Ewoud", "Tom"];
 const OPTIONS = ["Taghazout", "Albanie", "Malta", "FuerteVentura", "Chartreuse (drank)", "Tunesie"];
-
-// Weighted sum elimination ("Borda count"): loser = highest sum.
-function weightedFindLoser(ballots, candidates) {
-  const score = {};
-  candidates.forEach(c => (score[c] = 0));
-  ballots.forEach(ranking => {
-    ranking.forEach((cand, idx) => {
-      if (candidates.includes(cand)) {
-        score[cand] += idx + 1;
-      }
-    });
-  });
-  const maxSum = Math.max(...Object.values(score));
-  const losers = Object.entries(score).filter(([_, v]) => v === maxSum).map(([k]) => k);
-  return {
-    loser: losers.length === 1 ? losers[0] : losers[Math.floor(Math.random() * losers.length)],
-    score,
-  };
-}
 
 const initialState = {
   stage: "setup",
