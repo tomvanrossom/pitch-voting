@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { VotingProvider, useVoting, VOTERS, OPTIONS, loadConfig } from './votingContext';
+import { VotingProvider, useVoting, VOTERS, OPTIONS, loadConfig, saveConfig } from './votingContext';
 
 // Wrapper component for testing hooks with context
 const wrapper = ({ children }) => <VotingProvider>{children}</VotingProvider>;
@@ -528,6 +528,18 @@ describe('votingContext', () => {
       const result = loadConfig();
 
       expect(result).toEqual(mockConfig);
+    });
+
+    it('saveConfig saves config to localStorage', () => {
+      const config = {
+        voters: ['Carol', 'Dave'],
+        candidates: ['Choice 1', 'Choice 2']
+      };
+
+      saveConfig(config);
+
+      const saved = localStorage.getItem('voting-app-config');
+      expect(JSON.parse(saved)).toEqual(config);
     });
   });
 });

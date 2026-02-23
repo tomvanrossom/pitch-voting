@@ -24,6 +24,14 @@ export function loadConfig() {
   return DEFAULT_CONFIG;
 }
 
+export function saveConfig(config) {
+  try {
+    localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(config));
+  } catch (error) {
+    console.error("Failed to save config to localStorage:", error);
+  }
+}
+
 // Helper function to load state from localStorage
 function loadStateFromStorage() {
   try {
