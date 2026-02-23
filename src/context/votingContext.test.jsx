@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { VotingProvider, useVoting, VOTERS, OPTIONS, loadConfig, saveConfig } from './votingContext';
+import { VotingProvider, useVoting, VOTERS, OPTIONS, loadConfig, saveConfig, clearConfig, DEFAULT_CONFIG } from './votingContext';
 
 // Wrapper component for testing hooks with context
 const wrapper = ({ children }) => <VotingProvider>{children}</VotingProvider>;
@@ -540,6 +540,28 @@ describe('votingContext', () => {
 
       const saved = localStorage.getItem('voting-app-config');
       expect(JSON.parse(saved)).toEqual(config);
+    });
+
+    it('clearConfig removes config from localStorage', () => {
+      localStorage.setItem('voting-app-config', JSON.stringify({ voters: [], candidates: [] }));
+
+      clearConfig();
+
+      expect(localStorage.getItem('voting-app-config')).toBeNull();
+    });
+
+    it('loadConfig returns DEFAULT_CONFIG when no saved data', () => {
+      const result = loadConfig();
+
+      expect(result).toEqual(DEFAULT_CONFIG);
+    });
+
+    it('loadConfig returns DEFAULT_CONFIG when data is corrupted', () => {
+      localStorage.setItem('voting-app-config', 'invalid json {{{');
+
+      const result = loadConfig();
+
+      expect(result).toEqual(DEFAULT_CONFIG);
     });
   });
 });

@@ -32,6 +32,14 @@ export function saveConfig(config) {
   }
 }
 
+export function clearConfig() {
+  try {
+    localStorage.removeItem(CONFIG_STORAGE_KEY);
+  } catch (error) {
+    console.error("Failed to clear config from localStorage:", error);
+  }
+}
+
 // Helper function to load state from localStorage
 function loadStateFromStorage() {
   try {
