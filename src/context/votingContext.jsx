@@ -1,10 +1,43 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { weightedFindLoser } from "../utils/votingUtils";
 
 const VOTERS = ["Bert", "Birger", "Dave", "Ewoud", "Tom"];
 const OPTIONS = ["Taghazout", "Albanie", "Malta", "FuerteVentura", "Chartreuse (drank)", "Tunesie"];
 
-const initialState = {
+const STORAGE_KEY = "voting-app-state";
+
+// Helper function to load state from localStorage
+function loadStateFromStorage() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Failed to load state from localStorage:", error);
+  }
+  return null;
+}
+
+// Helper function to save state to localStorage
+function saveStateToStorage(state) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    console.error("Failed to save state to localStorage:", error);
+  }
+}
+
+// Helper function to clear localStorage
+function clearStorage() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (error) {
+    console.error("Failed to clear localStorage:", error);
+  }
+}
+
+const defaultInitialState = {
   stage: "setup",
   candidates: [...OPTIONS],
   round: 1,
@@ -17,11 +50,14 @@ const initialState = {
   pendingAnnouncement: false,
 };
 
+// Try to load saved state, fallback to default
+const initialState = loadStateFromStorage() || defaultInitialState;
+
 function votingReducer(state, action) {
   switch (action.type) {
     case "START_VOTING":
       return {
-        ...initialState,
+        ...defaultInitialState,
         stage: "voting",
       };
 
@@ -82,7 +118,8 @@ function votingReducer(state, action) {
     }
 
     case "RESET":
-      return initialState;
+      clearStorage();
+      return defaultInitialState;
 
     default:
       return state;
@@ -93,6 +130,11 @@ const VotingContext = createContext();
 
 export function VotingProvider({ children }) {
   const [state, dispatch] = useReducer(votingReducer, initialState);
+
+  // Auto-save state to localStorage whenever it changes
+  useEffect(() => {
+    saveStateToStorage(state);
+  }, [state]);
 
   return (
     <VotingContext.Provider value={{ state, dispatch }}>
