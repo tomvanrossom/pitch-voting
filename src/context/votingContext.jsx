@@ -1,10 +1,27 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { weightedFindLoser } from "../utils/votingUtils";
 
-const VOTERS = ["Bert", "Birger", "Dave", "Ewoud", "Tom"];
-const OPTIONS = ["Taghazout", "Albanie", "Malta", "FuerteVentura", "Chartreuse (drank)", "Tunesie"];
+const DEFAULT_CONFIG = {
+  voters: ["Bert", "Birger", "Dave", "Ewoud", "Tom"],
+  candidates: ["Taghazout", "Albanie", "Malta", "FuerteVentura", "Chartreuse (drank)", "Tunesie"]
+};
+
+const VOTERS = DEFAULT_CONFIG.voters;
+const OPTIONS = DEFAULT_CONFIG.candidates;
 
 const STORAGE_KEY = "voting-app-state";
+
+export function loadConfig() {
+  try {
+    const saved = localStorage.getItem('voting-app-config');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Failed to load config from localStorage:", error);
+  }
+  return DEFAULT_CONFIG;
+}
 
 // Helper function to load state from localStorage
 function loadStateFromStorage() {
