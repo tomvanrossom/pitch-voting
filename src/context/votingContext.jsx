@@ -10,15 +10,16 @@ const VOTERS = DEFAULT_CONFIG.voters;
 const OPTIONS = DEFAULT_CONFIG.candidates;
 
 const STORAGE_KEY = "voting-app-state";
+const CONFIG_STORAGE_KEY = "voting-app-config";
 
 export function loadConfig() {
   try {
-    const saved = localStorage.getItem('voting-app-config');
+    const saved = localStorage.getItem(CONFIG_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
   } catch (error) {
-    console.error("Failed to load config from localStorage:", error);
+    console.error("Failed to load config from localStorage", error);
   }
   return DEFAULT_CONFIG;
 }
@@ -168,4 +169,4 @@ export function useVoting() {
   return context;
 }
 
-export { VOTERS, OPTIONS };
+export { VOTERS, OPTIONS, DEFAULT_CONFIG };
