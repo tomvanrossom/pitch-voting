@@ -1,0 +1,24 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+.config-form {
+  max-width: 800px;
+  margin: 0 auto;
+
+  &__title {
+    margin-bottom: $spacing-lg;
+    text-align: center;
+  }
+
+  &__sections {
+    @include flex-column($gap: $spacing-xl);
+    margin-bottom: $spacing-xl;
+  }
+
+  &__hint {
+    margin-top: $spacing-sm;
+    text-align: center;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+  }
+}
