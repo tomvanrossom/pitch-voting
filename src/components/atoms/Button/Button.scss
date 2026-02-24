@@ -7,7 +7,7 @@
   font-size: $font-size-base;
   font-weight: 500;
   border: none;
-  border-radius: $radius-md;
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: all $transition-base, transform $transition-smooth;
   font-family: inherit;
@@ -54,43 +54,88 @@
   &--primary {
     background-color: $color-primary;
     color: white;
-    box-shadow: $shadow-sm;
-    
+    box-shadow: $shadow-xs;
+
     &:hover:not(:disabled) {
       background-color: $color-primary-dark;
+      box-shadow: $shadow-md;
     }
   }
   
   &--secondary {
-    background-color: $color-secondary;
+    background-color: $color-gray-600;
     color: white;
-    box-shadow: $shadow-sm;
-    
+    box-shadow: $shadow-xs;
+
     &:hover:not(:disabled) {
-      background-color: color.scale($color-secondary, $lightness: -24%);
+      background-color: $color-gray-700;
     }
   }
   
   &--success {
     background-color: $color-success;
     color: white;
-    box-shadow: $shadow-sm;
-    
+    box-shadow: $shadow-xs;
+
     &:hover:not(:disabled) {
-      background-color: color.scale($color-success, $lightness: -30%);
+      background-color: darken($color-success, 10%);
     }
   }
-  
+
+  &--outlined {
+    background-color: transparent;
+    color: $color-heading-secondary;
+    border: 2px solid $color-gray-500;
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background-color: $color-gray-100;
+      border-color: $color-gray-600;
+    }
+  }
+
+  &--text {
+    background-color: transparent;
+    color: $color-primary;
+    box-shadow: none;
+    padding: 0.5rem 1rem;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-lighter;
+      box-shadow: none;
+      transform: none;
+    }
+  }
+
+  // Gradient variant removed - using solid colors for professional appearance
+  // &--gradient {
+  //   background: $gradient-primary;
+  //   color: white;
+  //   box-shadow: $shadow-md;
+  //   border: none;
+  //
+  //   &:hover:not(:disabled) {
+  //     box-shadow: $shadow-xl;
+  //     filter: brightness(1.1);
+  //   }
+  // }
+
+  &--pill {
+    border-radius: $radius-full;
+    padding-left: $spacing-lg;
+    padding-right: $spacing-lg;
+  }
+
   &--small {
     padding: $spacing-xs $spacing-sm;
     font-size: $font-size-sm;
   }
-  
+
   &--large {
     padding: $spacing-md $spacing-lg;
     font-size: $font-size-lg;
   }
-  
+
   &--full-width {
     width: 100%;
   }
