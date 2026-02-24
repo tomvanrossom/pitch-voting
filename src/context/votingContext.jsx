@@ -189,7 +189,10 @@ function votingReducer(state, action) {
 
     case "RESET":
       clearStorage();
-      return defaultInitialState;
+      return {
+        ...defaultInitialState,
+        stage: "configure"
+      };
 
     default:
       return state;

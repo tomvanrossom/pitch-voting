@@ -404,7 +404,7 @@ describe('votingContext', () => {
         result.current.dispatch({ type: 'RESET' });
       });
 
-      expect(result.current.state.stage).toBe('setup');
+      expect(result.current.state.stage).toBe('configure');
       expect(result.current.state.candidates).toEqual(OPTIONS);
       expect(result.current.state.round).toBe(1);
       expect(result.current.state.ballots).toEqual([]);
@@ -481,7 +481,7 @@ describe('votingContext', () => {
       act(() => {
         result.current.dispatch({ type: 'RESET' });
       });
-      expect(result.current.state.stage).toBe('setup');
+      expect(result.current.state.stage).toBe('configure');
     });
 
     it('should maintain elimination history across rounds', () => {
@@ -692,8 +692,8 @@ describe('votingContext', () => {
       expect(savedConfig).toBeTruthy();
       expect(JSON.parse(savedConfig)).toEqual(mockConfig);
 
-      // State should be reset to initial state (with setup stage since config exists)
-      expect(testState.stage).toBe('setup');
+      // State should be reset to initial state (with configure stage after RESET)
+      expect(testState.stage).toBe('configure');
       expect(testState.round).toBe(1);
       expect(testState.ballots).toEqual([]);
       expect(testState.winner).toBeNull();
