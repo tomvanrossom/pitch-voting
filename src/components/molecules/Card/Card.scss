@@ -1,22 +1,46 @@
 @use '../../../styles/tokens' as *;
 
 .card {
-  background-color: white;
-  border-radius: $radius-lg;
-  
+  background-color: $color-background;
+  border-radius: 0.75rem;
+  border: none;
+  transition: all $transition-base;
+
   &--shadow {
-    box-shadow: $shadow-md;
+    box-shadow: $shadow-sm;
   }
-  
+
+  &--elevated {
+    box-shadow: $shadow-lg;
+  }
+
+  &--hoverable {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadow-xl;
+    }
+  }
+
+  // Removed colored accent variants for professional design
+  // &--accent-top {
+  //   border-top: 4px solid $color-primary;
+  // }
+  //
+  // &--accent-left {
+  //   border-left: 4px solid $color-primary;
+  // }
+
   &--padding-small {
     padding: $spacing-sm;
   }
-  
+
   &--padding-medium {
     padding: $spacing-md;
   }
-  
+
   &--padding-large {
-    padding: $spacing-lg;
+    padding: 2.5rem;
   }
 }
