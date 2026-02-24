@@ -45,4 +45,27 @@
     padding: 4px $spacing-xs;
     font-size: $font-size-xs;
   }
+
+  &__remove {
+    margin-left: $spacing-xs;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 1.25em;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:focus {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+  }
 }
