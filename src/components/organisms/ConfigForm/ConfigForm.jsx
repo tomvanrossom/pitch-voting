@@ -64,7 +64,7 @@ export function ConfigForm({ voters, candidates, onUpdateVoters, onUpdateCandida
 
       <Button
         onClick={onContinue}
-        variant="gradient"
+        variant="primary"
         size="large"
         fullWidth
         disabled={!isValid}

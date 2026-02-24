@@ -23,6 +23,7 @@ export function Announce() {
         </Heading>
         <Button
           onClick={revealLoserOrWinner}
+          variant="primary"
           size="large"
           aria-label={`Reveal ${candidates.length === 2 ? 'the winner' : 'the eliminated candidate'} for this round`}
         >

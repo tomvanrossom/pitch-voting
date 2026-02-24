@@ -93,8 +93,9 @@ function BallotForm({ candidates, voterName }) {
               {error}
             </div>
           )}
-          <Button 
+          <Button
             type="submit"
+            variant="primary"
             size="large"
             fullWidth
             aria-label={`Submit ballot for ${voterName}`}

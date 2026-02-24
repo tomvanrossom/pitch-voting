@@ -21,6 +21,7 @@ export function Eliminated() {
       </Alert>
       <Button
         onClick={handleNextRound}
+        variant="primary"
         size="large"
         aria-label={`Proceed to round ${round + 1} of voting`}
       >
