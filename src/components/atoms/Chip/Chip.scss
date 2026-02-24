@@ -18,29 +18,29 @@
   }
 
   &--primary {
-    background: $color-primary;
-    color: white;
+    background: $color-gray-200;
+    color: $color-heading-secondary;
   }
 
   &--secondary {
-    background: $color-secondary;
-    color: white;
+    background: $color-gray-200;
+    color: $color-heading-secondary;
   }
 
   &--error {
-    background: $color-error;
-    color: white;
+    background: $color-error-bg;
+    color: $color-error;
   }
 
   &--success {
-    background: $color-success;
-    color: white;
+    background: $color-success-bg;
+    color: $color-success;
   }
 
   &--outlined {
     background: transparent;
-    border: 1px solid $color-primary;
-    color: $color-primary;
+    border: 1px solid $color-gray-300;
+    color: $color-gray-600;
 
     &-error {
       border-color: $color-error;
