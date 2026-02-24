@@ -2,34 +2,35 @@
 @use '../../../styles/tokens' as *;
 
 .alert {
-  padding: $spacing-md $spacing-lg;
-  border-radius: $radius-md;
-  font-size: $font-size-lg;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
   font-weight: 500;
   text-align: center;
-  margin: $spacing-md 0;
-  
+  margin: 1.5rem 0;
+  border: 1px solid;
+
   &--success {
-    background-color: color.scale($color-success, $lightness: 60%);
-    color: color.scale($color-success, $lightness: -60%);
-    border: 2px solid $color-success;
+    background-color: $color-success-bg;
+    color: $color-success;
+    border-color: $color-success;
   }
-  
+
   &--warning {
-    background-color: color.scale($color-warning, $lightness: 66%);
-    color: color.scale($color-warning, $lightness: -53%);
-    border: 2px solid $color-warning;
+    background-color: $color-warning-bg;
+    color: $color-warning;
+    border-color: $color-warning;
   }
-  
+
   &--error {
-    background-color: color.scale($color-error, $lightness: 81%);
-    color: color.scale($color-error, $lightness: -30%);
-    border: 2px solid $color-error;
+    background-color: $color-error-bg;
+    color: $color-error;
+    border-color: $color-error;
   }
-  
+
   &--info {
-    background-color: color.scale($color-primary, $lightness: 87%);
-    color: color.scale($color-primary, $lightness: -30%);
-    border: 2px solid $color-primary;
+    background-color: $color-info-bg;
+    color: $color-info;
+    border-color: $color-info;
   }
 }
