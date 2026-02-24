@@ -1,0 +1,30 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+.config-list {
+  @include flex-column($gap: $spacing-md);
+
+  &__input-group {
+    display: flex;
+    gap: $spacing-sm;
+    align-items: flex-start;
+  }
+
+  &__input {
+    flex: 1;
+    padding: $spacing-sm $spacing-md;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-base;
+
+    &:focus {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
+  }
+
+  &__error {
+    color: $color-error;
+    font-size: $font-size-sm;
+  }
+}
