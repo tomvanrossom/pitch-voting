@@ -38,9 +38,26 @@
     background-color: rgba(black, 0.1);
     color: white;
     font-size: $font-size-sm;
-    
+
     p {
       margin: 0;
     }
+  }
+
+  &__header-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    display: inline-block;
+  }
+
+  &__subtitle {
+    font-size: 0.875rem;
+    color: $color-gray-500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.5rem;
+    font-weight: 500;
   }
 }
