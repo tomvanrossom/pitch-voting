@@ -14,18 +14,41 @@
   &__input {
     flex: 1;
     padding: $spacing-sm $spacing-md;
-    border: 1px solid $color-border;
-    border-radius: $radius-sm;
+    border: 2px solid $color-border;
+    border-radius: $radius-md;
     font-size: $font-size-base;
+    transition: all $transition-base;
+    background: $color-background;
+
+    &:hover {
+      border-color: rgba(25, 118, 210, 0.3);
+    }
 
     &:focus {
-      outline: 2px solid $color-primary;
-      outline-offset: 2px;
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
     }
   }
 
   &__error {
     color: $color-error;
     font-size: $font-size-sm;
+    padding: $spacing-xs $spacing-sm;
+    background: rgba(211, 47, 47, 0.08);
+    border-radius: $radius-sm;
+    border-left: 3px solid $color-error;
+    animation: slideIn $transition-base;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
