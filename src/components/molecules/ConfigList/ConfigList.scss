@@ -2,7 +2,8 @@
 @use '../../../styles/mixins' as *;
 
 .config-list {
-  @include flex-column($gap: $spacing-md);
+  @include flex-column;
+  gap: $spacing-md;
 
   &__input-group {
     display: flex;
@@ -14,7 +15,7 @@
     flex: 1;
     padding: $spacing-sm $spacing-md;
     border: 1px solid $color-border;
-    border-radius: $border-radius-sm;
+    border-radius: $radius-sm;
     font-size: $font-size-base;
 
     &:focus {

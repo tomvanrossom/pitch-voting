@@ -11,7 +11,8 @@
   }
 
   &__sections {
-    @include flex-column($gap: $spacing-xl);
+    @include flex-column;
+    gap: $spacing-xl;
     margin-bottom: $spacing-xl;
   }
 

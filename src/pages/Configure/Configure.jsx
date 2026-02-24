@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useVoting } from "../../context/votingContext";
 import { ConfigForm } from "../../components/organisms/ConfigForm";
 import { loadConfig, saveConfig } from "../../context/votingContext";
 import "./Configure.scss";
 
 export function Configure() {
-  const navigate = useNavigate();
+  const { dispatch } = useVoting();
   const [config, setConfig] = useState(() => loadConfig());
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export function Configure() {
   };
 
   const handleContinue = () => {
-    navigate("/setup");
+    dispatch({ type: "GOTO_SETUP" });
   };
 
   return (
