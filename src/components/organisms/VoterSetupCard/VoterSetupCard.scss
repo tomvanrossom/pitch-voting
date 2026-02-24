@@ -19,4 +19,19 @@
       margin-bottom: $spacing-sm;
     }
   }
+
+  &__section-header {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $color-gray-500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+  }
+
+  &__section-content {
+    background: $color-surface-secondary;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+  }
 }
