@@ -17,16 +17,14 @@
   }
   
   &__header {
-    background-color: $color-surface;
+    background-color: $color-gray-100;
   }
   
   &__row {
-    &:not(:last-child) {
-      border-bottom: 1px solid $color-border;
-    }
-    
+    border-bottom: 1px solid $color-gray-200;
+
     &:hover {
-      background-color: color.scale($color-primary, $lightness: 87%);
+      background-color: $color-primary-lighter;
     }
   }
   
@@ -36,7 +34,7 @@
     
     &--header {
       font-weight: 600;
-      color: $color-text-primary;
+      color: $color-heading-secondary;
       text-align: center;
     }
     
