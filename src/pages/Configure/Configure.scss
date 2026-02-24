@@ -1,0 +1,15 @@
+@use "../../styles/tokens" as *;
+
+.configure-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+
+  &__container {
+    width: 100%;
+    max-width: 900px;
+  }
+}
