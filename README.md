@@ -13,13 +13,16 @@ This application enables teams to conduct ranked-choice voting using a weighted 
 
 ### Key Features
 
+- **Configurable voters and candidates** - Customize participants for each voting session
 - **Multi-round voting system** with progressive elimination
 - **Borda count algorithm** for fair vote weighting
 - **Interactive ballot forms** with duplicate prevention
 - **Visual progress tracking** with stepper component
 - **Detailed results table** showing all rounds and scores
 - **Suspense reveals** for engagement
+- **localStorage persistence** - Resume voting sessions after page reload
 - **Modern CSS architecture** using SCSS + BEM + Design Tokens
+- **Atomic Design pattern** - Scalable component architecture
 
 ## 🎯 Project Goals
 
@@ -36,7 +39,8 @@ This project serves as a **learning platform** for:
 
 ### State Management
 - **Context API + useReducer** for centralized state
-- Action-based state updates (START_VOTING, SUBMIT_BALLOT, REVEAL_RESULT, etc.)
+- Action-based state updates (UPDATE_CONFIG, START_VOTING, SUBMIT_BALLOT, REVEAL_RESULT, etc.)
+- **localStorage persistence** - Configuration and voting state automatically saved
 - Business logic separated from UI components
 
 ### CSS Architecture
@@ -50,18 +54,32 @@ This project serves as a **learning platform** for:
 ```
 src/
 ├── styles/
-│   ├── _tokens.scss       # Design system tokens
-│   ├── _mixins.scss       # Reusable SCSS mixins
-│   └── global.scss        # Global base styles
+│   ├── _tokens.scss          # Design system tokens
+│   ├── _mixins.scss          # Reusable SCSS mixins
+│   └── global.scss           # Global base styles
 ├── components/
-│   ├── BallotForm.js      # Voting form component
-│   ├── BallotForm.scss    # Ballot form styles
-│   ├── Chip.js            # Reusable badge component
-│   └── Chip.scss          # Chip styles
-├── App.js                 # Main application component
-├── App.scss               # Main app styles (BEM)
-├── votingContext.js       # State management (Context + Reducer)
-└── index.js               # App entry point
+│   ├── atoms/                # Atomic Design - Atoms
+│   │   ├── Button/           # Button component
+│   │   ├── Chip/             # Removable badge component
+│   │   ├── Heading/          # Heading component
+│   │   └── Stepper/          # Progress stepper
+│   ├── molecules/            # Atomic Design - Molecules
+│   │   ├── BallotForm/       # Voting form component
+│   │   ├── ChipGroup/        # Group of chips
+│   │   └── ConfigList/       # List with add/remove
+│   ├── organisms/            # Atomic Design - Organisms
+│   │   └── ConfigForm/       # Complete configuration form
+│   └── pages/                # Page-level components
+│       ├── Configure.jsx     # Configuration page
+│       ├── Setup.jsx         # Setup review page
+│       ├── VotingPage.jsx    # Voting rounds page
+│       └── ResultsPage.jsx   # Results page
+├── context/
+│   └── votingContext.jsx     # State management (Context + Reducer)
+├── utils/
+│   └── votingUtils.js        # Voting algorithm logic
+├── App.jsx                   # Main application router
+└── main.jsx                  # App entry point
 ```
 
 ## 🚀 Getting Started
@@ -107,11 +125,21 @@ npm run preview
 
 ## 🎮 How to Use
 
-1. **Setup Phase**: Review voters and candidates
-2. **Voting Rounds**: Each voter ranks all remaining candidates
-3. **Elimination**: After each round, the lowest-scoring candidate is eliminated
-4. **Winner Declaration**: Process continues until only one candidate remains
-5. **Results Summary**: View detailed scoring history for all rounds
+1. **Configure Phase**: Add voters and candidates for your voting session
+   - Add voters one at a time (press Enter or click "Add Voter")
+   - Add candidates to vote on (press Enter or click "Add Candidate")
+   - Remove items by clicking the × button on any chip
+   - Min: 2 voters, 2 candidates | Max: 50 voters, 20 candidates
+2. **Setup Phase**: Review your configuration before starting
+   - Edit configuration if needed by clicking "Edit Configuration"
+3. **Voting Rounds**: Each voter ranks all remaining candidates
+   - Voters submit ballots one at a time
+   - All candidates must be ranked (no ties allowed)
+4. **Elimination**: After each round, the lowest-scoring candidate is eliminated
+5. **Winner Declaration**: Process continues until only one candidate remains
+6. **Results Summary**: View detailed scoring history for all rounds
+7. **Persistence**: Your configuration and voting progress is automatically saved
+   - Close and reopen the browser to resume where you left off
 
 ## 🧮 Voting Algorithm
 
@@ -171,12 +199,14 @@ $shadow-sm: 0px 2px 1px -1px rgba(0,0,0,0.2);
 
 If you're using this project to learn, explore:
 
-1. **State Management**: `votingContext.js` - See reducer pattern in action
-2. **CSS Architecture**: `src/styles/` - Study token system and mixins
-3. **BEM Methodology**: All `.scss` files - Consistent naming patterns
-4. **Flexbox**: `App.scss` - Various flex layouts
-5. **Grid**: `.stepper` class - Responsive grid example
-6. **Component Design**: `BallotForm.js` - Form validation and state
+1. **State Management**: `src/context/votingContext.jsx` - See reducer pattern in action
+2. **Atomic Design**: `src/components/` - Atoms, molecules, organisms architecture
+3. **localStorage Persistence**: `votingContext.jsx` - Auto-save config and voting state
+4. **CSS Architecture**: `src/styles/` - Study token system and mixins
+5. **BEM Methodology**: All `.scss` files - Consistent naming patterns
+6. **Flexbox**: Component layouts - Various flex patterns
+7. **Form Validation**: `ConfigList.jsx` - Input validation and error handling
+8. **Component Composition**: `ChipGroup.jsx` - Reusable component patterns
 
 ## 🤝 Contributing
 
