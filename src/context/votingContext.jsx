@@ -90,11 +90,15 @@ const initialState = loadStateFromStorage() || defaultInitialState;
 
 function votingReducer(state, action) {
   switch (action.type) {
-    case "START_VOTING":
+    case "START_VOTING": {
+      const config = loadConfig();
       return {
         ...defaultInitialState,
+        voters: config.voters,
+        candidates: config.candidates,
         stage: "voting",
       };
+    }
 
     case "SUBMIT_BALLOT": {
       const updated = [...state.ballots, action.payload];

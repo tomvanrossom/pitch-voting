@@ -520,6 +520,40 @@ describe('votingContext', () => {
     });
   });
 
+  test('START_VOTING snapshots config into voting state', () => {
+    localStorage.clear();
+
+    const mockConfig = {
+      voters: ['Alice', 'Bob', 'Carol'],
+      candidates: ['Option1', 'Option2', 'Option3']
+    };
+    localStorage.setItem('voting-app-config', JSON.stringify(mockConfig));
+
+    let testState;
+    let testDispatch;
+
+    function TestComponent() {
+      const { state, dispatch } = useVoting();
+      testState = state;
+      testDispatch = dispatch;
+      return null;
+    }
+
+    render(
+      <VotingProvider>
+        <TestComponent />
+      </VotingProvider>
+    );
+
+    act(() => {
+      testDispatch({ type: 'START_VOTING' });
+    });
+
+    expect(testState.voters).toEqual(mockConfig.voters);
+    expect(testState.candidates).toEqual(mockConfig.candidates);
+    expect(testState.stage).toBe('voting');
+  });
+
   describe('Config Management', () => {
     beforeEach(() => {
       localStorage.clear();
