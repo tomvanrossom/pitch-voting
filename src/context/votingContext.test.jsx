@@ -760,4 +760,44 @@ describe('votingContext', () => {
       expect(testState.stage).toBe('setup');
     });
   });
+
+  describe('Backward Compatibility', () => {
+    test('app works with existing voting state (backward compatibility)', () => {
+      const existingState = {
+        stage: 'voting',
+        candidates: ['Option1', 'Option2'],
+        voters: ['Alice', 'Bob'],
+        round: 1,
+        ballots: [],
+        currentBallot: 0,
+        eliminatedHistory: [],
+        scoreHistory: [],
+        loser: null,
+        winner: null,
+        pendingAnnouncement: false
+      };
+
+      localStorage.setItem('voting-app-state', JSON.stringify(existingState));
+
+      let testState;
+
+      function TestComponent() {
+        const { state } = useVoting();
+        testState = state;
+        return null;
+      }
+
+      render(
+        <VotingProvider>
+          <TestComponent />
+        </VotingProvider>
+      );
+
+      // Should load existing state
+      expect(testState.stage).toBe('voting');
+      expect(testState.candidates).toEqual(['Option1', 'Option2']);
+      expect(testState.voters).toEqual(['Alice', 'Bob']);
+      expect(testState.round).toBe(1);
+    });
+  });
 });
