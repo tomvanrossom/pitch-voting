@@ -59,6 +59,12 @@ export function ConfigList({
           placeholder={placeholder}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleAdd();
+            }
+          }}
         />
         <Button onClick={handleAdd} variant="secondary">
           Add {singularLabel}
