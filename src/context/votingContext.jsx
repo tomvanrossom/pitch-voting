@@ -85,8 +85,23 @@ const defaultInitialState = {
   pendingAnnouncement: false,
 };
 
-// Try to load saved state, fallback to default
-const initialState = loadStateFromStorage() || defaultInitialState;
+// Initialize state based on saved state and config
+function initializeState() {
+  const savedState = loadStateFromStorage();
+  if (savedState) {
+    return savedState;
+  }
+
+  const hasSavedConfig = localStorage.getItem(CONFIG_STORAGE_KEY) !== null;
+  const config = loadConfig();
+
+  return {
+    ...defaultInitialState,
+    stage: hasSavedConfig ? "setup" : "configure",
+    voters: config.voters,
+    candidates: config.candidates
+  };
+}
 
 function votingReducer(state, action) {
   switch (action.type) {
@@ -184,7 +199,7 @@ function votingReducer(state, action) {
 const VotingContext = createContext();
 
 export function VotingProvider({ children }) {
-  const [state, dispatch] = useReducer(votingReducer, initialState);
+  const [state, dispatch] = useReducer(votingReducer, null, initializeState);
 
   // Auto-save state to localStorage whenever it changes
   useEffect(() => {

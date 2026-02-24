@@ -7,6 +7,10 @@ const wrapper = ({ children }) => <VotingProvider>{children}</VotingProvider>;
 
 describe('votingContext', () => {
   describe('Initial State', () => {
+    beforeEach(() => {
+      localStorage.clear();
+    });
+
     it('initial state includes voters array', () => {
       const { result } = renderHook(() => useVoting(), { wrapper });
 
@@ -14,10 +18,24 @@ describe('votingContext', () => {
       expect(Array.isArray(result.current.state.voters)).toBe(true);
     });
 
-    it('should initialize with setup stage', () => {
+    it('should initialize with configure stage when no config is saved', () => {
+      const { result } = renderHook(() => useVoting(), { wrapper });
+
+      expect(result.current.state.stage).toBe('configure');
+    });
+
+    it('should initialize with setup stage when config is saved', () => {
+      const mockConfig = {
+        voters: ['Alice', 'Bob'],
+        candidates: ['Option1', 'Option2']
+      };
+      localStorage.setItem('voting-app-config', JSON.stringify(mockConfig));
+
       const { result } = renderHook(() => useVoting(), { wrapper });
 
       expect(result.current.state.stage).toBe('setup');
+      expect(result.current.state.voters).toEqual(mockConfig.voters);
+      expect(result.current.state.candidates).toEqual(mockConfig.candidates);
     });
 
     it('should initialize with all candidates', () => {
@@ -649,10 +667,12 @@ describe('votingContext', () => {
       localStorage.setItem('voting-app-config', JSON.stringify(mockConfig));
       localStorage.setItem('voting-app-state', JSON.stringify({ stage: 'winner' }));
 
+      let testState;
       let testDispatch;
 
       function TestComponent() {
-        const { dispatch } = useVoting();
+        const { state, dispatch } = useVoting();
+        testState = state;
         testDispatch = dispatch;
         return null;
       }
@@ -672,8 +692,11 @@ describe('votingContext', () => {
       expect(savedConfig).toBeTruthy();
       expect(JSON.parse(savedConfig)).toEqual(mockConfig);
 
-      // State should be cleared
-      expect(localStorage.getItem('voting-app-state')).toBeNull();
+      // State should be reset to initial state (with setup stage since config exists)
+      expect(testState.stage).toBe('setup');
+      expect(testState.round).toBe(1);
+      expect(testState.ballots).toEqual([]);
+      expect(testState.winner).toBeNull();
     });
   });
 
