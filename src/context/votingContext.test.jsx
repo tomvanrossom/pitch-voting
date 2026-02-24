@@ -640,5 +640,40 @@ describe('votingContext', () => {
       const saved = JSON.parse(localStorage.getItem('voting-app-config'));
       expect(saved).toEqual(newConfig);
     });
+
+    test('RESET clears voting state but preserves config', () => {
+      const mockConfig = {
+        voters: ['Alice', 'Bob'],
+        candidates: ['Option1', 'Option2']
+      };
+      localStorage.setItem('voting-app-config', JSON.stringify(mockConfig));
+      localStorage.setItem('voting-app-state', JSON.stringify({ stage: 'winner' }));
+
+      let testDispatch;
+
+      function TestComponent() {
+        const { dispatch } = useVoting();
+        testDispatch = dispatch;
+        return null;
+      }
+
+      render(
+        <VotingProvider>
+          <TestComponent />
+        </VotingProvider>
+      );
+
+      act(() => {
+        testDispatch({ type: 'RESET' });
+      });
+
+      // Config should still exist
+      const savedConfig = localStorage.getItem('voting-app-config');
+      expect(savedConfig).toBeTruthy();
+      expect(JSON.parse(savedConfig)).toEqual(mockConfig);
+
+      // State should be cleared
+      expect(localStorage.getItem('voting-app-state')).toBeNull();
+    });
   });
 });
