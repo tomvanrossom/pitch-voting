@@ -5,17 +5,17 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  background: $gradient-background;
   
   &__header {
     padding: $spacing-lg;
     text-align: center;
-    background-color: rgba(white, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
   }
   
   &__title {
-    color: white;
+    color: $color-heading;
     font-size: $font-size-3xl;
     margin: 0;
     display: flex;
@@ -26,7 +26,7 @@
   
   &__main {
     flex: 1;
-    padding: $spacing-xl $spacing-md;
+    padding: 4rem 2rem;
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;

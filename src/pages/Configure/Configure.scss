@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   padding: $spacing-lg;
-  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  background: $gradient-background;
 
   &__container {
     width: 100%;
