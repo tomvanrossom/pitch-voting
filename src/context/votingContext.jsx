@@ -117,7 +117,7 @@ function votingReducer(state, action) {
 
     case "SUBMIT_BALLOT": {
       const updated = [...state.ballots, action.payload];
-      if (state.currentBallot + 1 < VOTERS.length) {
+      if (state.currentBallot + 1 < state.voters.length) {
         return {
           ...state,
           ballots: updated,
