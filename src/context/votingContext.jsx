@@ -152,6 +152,10 @@ function votingReducer(state, action) {
       };
     }
 
+    case "UPDATE_CONFIG":
+      saveConfig(action.payload);
+      return state;
+
     case "RESET":
       clearStorage();
       return defaultInitialState;

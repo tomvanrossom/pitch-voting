@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { describe, it, expect, beforeEach, test } from 'vitest';
+import { renderHook, act, render } from '@testing-library/react';
 import { VotingProvider, useVoting, VOTERS, OPTIONS, loadConfig, saveConfig, clearConfig, DEFAULT_CONFIG } from './votingContext';
 
 // Wrapper component for testing hooks with context
@@ -569,6 +569,42 @@ describe('votingContext', () => {
       const result = loadConfig();
 
       expect(result).toEqual(DEFAULT_CONFIG);
+    });
+
+    test('UPDATE_CONFIG saves config to localStorage without changing state', () => {
+      let testDispatch;
+      let stateBefore;
+      let stateAfter;
+
+      function TestComponent() {
+        const { state, dispatch } = useVoting();
+        testDispatch = dispatch;
+        if (!stateBefore) stateBefore = state;
+        stateAfter = state;
+        return null;
+      }
+
+      render(
+        <VotingProvider>
+          <TestComponent />
+        </VotingProvider>
+      );
+
+      const newConfig = {
+        voters: ['New1', 'New2'],
+        candidates: ['OptionX', 'OptionY']
+      };
+
+      act(() => {
+        testDispatch({ type: 'UPDATE_CONFIG', payload: newConfig });
+      });
+
+      // State should not change
+      expect(stateAfter).toEqual(stateBefore);
+
+      // But config should be saved
+      const saved = JSON.parse(localStorage.getItem('voting-app-config'));
+      expect(saved).toEqual(newConfig);
     });
   });
 });
