@@ -1,5 +1,5 @@
 import React from "react";
-import { useVoting, VOTERS } from "../context/votingContext.jsx";
+import { useVoting } from "../context/votingContext.jsx";
 import { VotingLayout } from "../components/templates/VotingLayout/VotingLayout";
 import { Configure } from "./Configure";
 import { Setup } from "./Setup";

@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, test } from 'vitest';
 import { renderHook, act, render } from '@testing-library/react';
-import { VotingProvider, useVoting, VOTERS, OPTIONS, loadConfig, saveConfig, clearConfig, DEFAULT_CONFIG } from './votingContext';
+import { VotingProvider, useVoting, loadConfig, saveConfig, clearConfig, DEFAULT_CONFIG } from './votingContext';
+
+const VOTERS = DEFAULT_CONFIG.voters;
+const OPTIONS = DEFAULT_CONFIG.candidates;
 
 // Wrapper component for testing hooks with context
 const wrapper = ({ children }) => <VotingProvider>{children}</VotingProvider>;

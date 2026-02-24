@@ -1,5 +1,5 @@
 import React from 'react';
-import { useVoting, OPTIONS } from '../../context/votingContext.jsx';
+import { useVoting } from '../../context/votingContext.jsx';
 import { Alert } from '../../components/molecules/Alert/Alert';
 import { Button } from '../../components/atoms/Button/Button';
 import { Heading } from '../../components/atoms/Heading/Heading';
@@ -9,7 +9,7 @@ import './Winner.scss';
 
 export function Winner() {
   const { state, dispatch } = useVoting();
-  const { winner, eliminatedHistory, scoreHistory } = state;
+  const { winner, eliminatedHistory, scoreHistory, candidates } = state;
   
   const historyArr = eliminatedHistory.map((el, idx) => ({
     round: idx + 1,
@@ -35,7 +35,7 @@ export function Winner() {
         </Heading>
         <ResultsTable
           historyData={historyArr}
-          allOptions={OPTIONS}
+          allOptions={candidates}
           winner={winner}
         />
       </section>

@@ -224,4 +224,4 @@ export function useVoting() {
   return context;
 }
 
-export { VOTERS, OPTIONS, DEFAULT_CONFIG };
+export { DEFAULT_CONFIG };
