@@ -676,4 +676,62 @@ describe('votingContext', () => {
       expect(localStorage.getItem('voting-app-state')).toBeNull();
     });
   });
+
+  describe('Navigation Actions', () => {
+    test('GOTO_CONFIGURE transitions to configure stage', () => {
+      let testState;
+      let testDispatch;
+
+      function TestComponent() {
+        const { state, dispatch } = useVoting();
+        testState = state;
+        testDispatch = dispatch;
+        return null;
+      }
+
+      render(
+        <VotingProvider>
+          <TestComponent />
+        </VotingProvider>
+      );
+
+      act(() => {
+        testDispatch({ type: 'GOTO_CONFIGURE' });
+      });
+
+      expect(testState.stage).toBe('configure');
+    });
+
+    test('GOTO_SETUP transitions to setup stage', () => {
+      let testState;
+      let testDispatch;
+
+      function TestComponent() {
+        const { state, dispatch } = useVoting();
+        testState = state;
+        testDispatch = dispatch;
+        return null;
+      }
+
+      render(
+        <VotingProvider>
+          <TestComponent />
+        </VotingProvider>
+      );
+
+      // First go to configure
+      act(() => {
+        testDispatch({ type: 'GOTO_CONFIGURE' });
+      });
+
+      expect(testState.stage).toBe('configure');
+
+      // Then transition to setup
+      act(() => {
+        testDispatch({ type: 'GOTO_SETUP' });
+      });
+
+      expect(testState.stage).toBe('setup');
+    });
+  });
 });

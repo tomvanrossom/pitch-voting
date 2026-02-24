@@ -160,6 +160,18 @@ function votingReducer(state, action) {
       saveConfig(action.payload);
       return state;
 
+    case "GOTO_SETUP":
+      return {
+        ...state,
+        stage: "setup"
+      };
+
+    case "GOTO_CONFIGURE":
+      return {
+        ...state,
+        stage: "configure"
+      };
+
     case "RESET":
       clearStorage();
       return defaultInitialState;
