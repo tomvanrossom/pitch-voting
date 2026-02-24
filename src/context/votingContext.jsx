@@ -73,6 +73,7 @@ function clearStorage() {
 
 const defaultInitialState = {
   stage: "setup",
+  voters: [],
   candidates: [...OPTIONS],
   round: 1,
   ballots: [],

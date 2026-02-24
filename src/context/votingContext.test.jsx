@@ -7,6 +7,13 @@ const wrapper = ({ children }) => <VotingProvider>{children}</VotingProvider>;
 
 describe('votingContext', () => {
   describe('Initial State', () => {
+    it('initial state includes voters array', () => {
+      const { result } = renderHook(() => useVoting(), { wrapper });
+
+      expect(result.current.state.voters).toBeDefined();
+      expect(Array.isArray(result.current.state.voters)).toBe(true);
+    });
+
     it('should initialize with setup stage', () => {
       const { result } = renderHook(() => useVoting(), { wrapper });
 
