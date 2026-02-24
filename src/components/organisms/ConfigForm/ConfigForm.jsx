@@ -31,33 +31,40 @@ export function ConfigForm({ voters, candidates, onUpdateVoters, onUpdateCandida
       </Heading>
 
       <div className="config-form__sections">
-        <ConfigList
-          title="Voters"
-          items={voters}
-          onAdd={handleAddVoter}
-          onRemove={handleRemoveVoter}
-          placeholder="Enter voter name..."
-          maxItems={50}
-          minItems={2}
-          singularLabel="voter"
-          pluralLabel="voters"
-        />
+        <div className="config-form__section">
+          <div className="config-form__section-title">Voters</div>
+          <ConfigList
+            title="Voters"
+            items={voters}
+            onAdd={handleAddVoter}
+            onRemove={handleRemoveVoter}
+            placeholder="Enter voter name..."
+            maxItems={50}
+            minItems={2}
+            singularLabel="voter"
+            pluralLabel="voters"
+          />
+        </div>
 
-        <ConfigList
-          title="Candidates"
-          items={candidates}
-          onAdd={handleAddCandidate}
-          onRemove={handleRemoveCandidate}
-          placeholder="Enter candidate name..."
-          maxItems={50}
-          minItems={2}
-          singularLabel="candidate"
-          pluralLabel="candidates"
-        />
+        <div className="config-form__section">
+          <div className="config-form__section-title">Candidates</div>
+          <ConfigList
+            title="Candidates"
+            items={candidates}
+            onAdd={handleAddCandidate}
+            onRemove={handleRemoveCandidate}
+            placeholder="Enter candidate name..."
+            maxItems={50}
+            minItems={2}
+            singularLabel="candidate"
+            pluralLabel="candidates"
+          />
+        </div>
       </div>
 
       <Button
         onClick={onContinue}
+        variant="gradient"
         size="large"
         fullWidth
         disabled={!isValid}

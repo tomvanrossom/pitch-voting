@@ -22,4 +22,21 @@
     color: $color-text-secondary;
     font-size: $font-size-sm;
   }
+
+  &__section {
+    background: $color-surface-secondary;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  &__section-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $color-heading-secondary;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+  }
 }
