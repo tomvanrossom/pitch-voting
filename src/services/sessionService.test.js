@@ -14,6 +14,11 @@ vi.mock('../lib/supabase', () => ({
   }
 }))
 
+// Mock supabaseHelpers
+vi.mock('../utils/supabaseHelpers', () => ({
+  createHostClient: vi.fn()
+}))
+
 describe('generateSessionCode', () => {
   it('returns a 6-character alphanumeric string', () => {
     const code = generateSessionCode()
@@ -123,5 +128,31 @@ describe('getSessionById', () => {
     const result = await getSessionById('uuid-123')
 
     expect(result.id).toBe('uuid-123')
+  })
+})
+
+describe('updateSession', () => {
+  it('updates session with host token', async () => {
+    const { createHostClient } = await import('../utils/supabaseHelpers')
+
+    const mockUpdated = { id: 'uuid-123', stage: 'voting' }
+
+    createHostClient.mockReturnValue({
+      from: vi.fn(() => ({
+        update: vi.fn(() => ({
+          eq: vi.fn(() => ({
+            select: vi.fn(() => ({
+              single: vi.fn().mockResolvedValue({ data: mockUpdated, error: null })
+            }))
+          }))
+        }))
+      }))
+    })
+
+    const { updateSession } = await import('./sessionService')
+    const result = await updateSession('uuid-123', { stage: 'voting' }, 'host-token-uuid')
+
+    expect(result.stage).toBe('voting')
+    expect(createHostClient).toHaveBeenCalledWith('host-token-uuid')
   })
 })

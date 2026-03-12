@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { createHostClient } from '../utils/supabaseHelpers'
 
 const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // Removed ambiguous: 0,O,1,I
 
@@ -61,6 +62,23 @@ export async function getSessionById(sessionId) {
 
   if (error) {
     throw new Error('Session not found')
+  }
+
+  return data
+}
+
+export async function updateSession(sessionId, updates, hostToken) {
+  const client = createHostClient(hostToken)
+
+  const { data, error } = await client
+    .from('sessions')
+    .update(updates)
+    .eq('id', sessionId)
+    .select()
+    .single()
+
+  if (error) {
+    throw new Error('Failed to update session: ' + error.message)
   }
 
   return data
