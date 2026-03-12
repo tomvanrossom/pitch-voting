@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { weightedFindLoser } from "../utils/votingUtils";
+import { updateSession } from "../services/sessionService";
+import { getRoundBallots } from "../services/ballotService";
 
 const DEFAULT_CONFIG = {
   voters: ["Bert", "Birger", "Dave", "Ewoud", "Tom"],
@@ -72,7 +74,7 @@ function clearStorage() {
 }
 
 const defaultInitialState = {
-  stage: "setup",
+  stage: "home",
   voters: [],
   candidates: [...OPTIONS],
   round: 1,
@@ -83,28 +85,140 @@ const defaultInitialState = {
   loser: null,
   winner: null,
   pendingAnnouncement: false,
+  // New Supabase session fields
+  sessionId: null,
+  hostToken: null,
+  voterName: null,
+  isHost: false,
+  session: null,
 };
 
 // Initialize state based on saved state and config
 function initializeState() {
-  const savedState = loadStateFromStorage();
-  if (savedState) {
-    return savedState;
+  // Check for saved voter session (multi-device voter)
+  try {
+    const voterSession = localStorage.getItem('voter_session');
+    if (voterSession) {
+      const { sessionId, voterName } = JSON.parse(voterSession);
+      return {
+        ...defaultInitialState,
+        stage: "lobby",
+        sessionId,
+        voterName,
+        isHost: false,
+      };
+    }
+  } catch (error) {
+    console.error("Failed to load voter session:", error);
   }
 
-  const hasSavedConfig = localStorage.getItem(CONFIG_STORAGE_KEY) !== null;
-  const config = loadConfig();
+  // Check for saved host session
+  const savedState = loadStateFromStorage();
+  if (savedState) {
+    // Only restore if it's a Supabase session with hostToken
+    if (savedState.sessionId && savedState.hostToken) {
+      return savedState;
+    }
+    // Legacy local-only state - start fresh
+    clearStorage();
+  }
 
-  return {
-    ...defaultInitialState,
-    stage: hasSavedConfig ? "setup" : "configure",
-    voters: config.voters,
-    candidates: config.candidates
-  };
+  // Start at home screen
+  return defaultInitialState;
 }
 
 function votingReducer(state, action) {
   switch (action.type) {
+    case "GOTO_CREATE_SESSION":
+      return { ...state, stage: "createSession" };
+
+    case "GOTO_JOIN_SESSION":
+      return { ...state, stage: "joinSession" };
+
+    case "SESSION_CREATED":
+      return {
+        ...state,
+        stage: "hostDashboard",
+        sessionId: action.payload.session.id,
+        hostToken: action.payload.hostToken,
+        session: action.payload.session,
+        isHost: true,
+        voters: action.payload.session.voters,
+        candidates: action.payload.session.candidates,
+      };
+
+    case "SESSION_JOINED":
+      return {
+        ...state,
+        stage: "lobby",
+        sessionId: action.payload.session.id,
+        session: action.payload.session,
+        voterName: action.payload.voterName,
+        isHost: false,
+        voters: action.payload.session.voters,
+        candidates: action.payload.session.candidates,
+      };
+
+    case "VOTING_STARTED":
+      return {
+        ...state,
+        stage: "voting",
+        session: action.payload,
+        round: action.payload.round,
+        candidates: action.payload.candidates.filter(c => !(action.payload.eliminated || []).includes(c)),
+      };
+
+    case "HOST_START_VOTING":
+      // The component will call updateSession, then dispatch UPDATE_SESSION
+      return { ...state };
+
+    case "VOTER_SUBMITTED":
+      return { ...state, stage: "voterSubmitted" };
+
+    case "UPDATE_SESSION":
+      return {
+        ...state,
+        session: action.payload,
+        round: action.payload.round || state.round,
+        candidates: action.payload.candidates
+          ? action.payload.candidates.filter(c => !(action.payload.eliminated || []).includes(c))
+          : state.candidates,
+      };
+
+    case "HOST_REVEAL":
+      // This will be handled asynchronously by the component
+      return { ...state };
+
+    case "SHOW_ELIMINATED":
+      return {
+        ...state,
+        stage: "eliminated",
+        loser: action.payload.loser,
+        scoreHistory: [...state.scoreHistory, action.payload.score],
+        eliminatedHistory: [...state.eliminatedHistory, action.payload.loser],
+        session: action.payload.session,
+      };
+
+    case "SHOW_WINNER":
+      return {
+        ...state,
+        stage: "winner",
+        winner: action.payload.winner,
+        scoreHistory: [...state.scoreHistory, action.payload.score],
+        eliminatedHistory: [...state.eliminatedHistory, action.payload.loser],
+        session: action.payload.session,
+      };
+
+    case "NEXT_ROUND_SUPABASE":
+      return {
+        ...state,
+        stage: "hostDashboard",
+        session: action.payload,
+        round: action.payload.round,
+        candidates: action.payload.candidates.filter(c => !(action.payload.eliminated || []).includes(c)),
+        loser: null,
+      };
+
     case "START_VOTING": {
       const config = loadConfig();
       return {
@@ -135,7 +249,7 @@ function votingReducer(state, action) {
 
     case "REVEAL_RESULT": {
       const { loser, score } = weightedFindLoser(state.ballots, state.candidates);
-      
+
       // Final round (two candidates): loser is not the winner
       if (state.candidates.length === 2) {
         return {
@@ -189,9 +303,15 @@ function votingReducer(state, action) {
 
     case "RESET":
       clearStorage();
+      // Also clear voter session
+      try {
+        localStorage.removeItem('voter_session');
+      } catch (e) {
+        console.error("Failed to clear voter session:", e);
+      }
       return {
         ...defaultInitialState,
-        stage: "configure"
+        stage: "home"
       };
 
     default:
@@ -204,13 +324,99 @@ const VotingContext = createContext();
 export function VotingProvider({ children }) {
   const [state, dispatch] = useReducer(votingReducer, null, initializeState);
 
-  // Auto-save state to localStorage whenever it changes
+  // Save host session state to localStorage (for host persistence)
   useEffect(() => {
-    saveStateToStorage(state);
+    if (state.isHost && state.sessionId && state.hostToken) {
+      saveStateToStorage(state);
+    }
   }, [state]);
 
+  // Wrap dispatch to handle async actions
+  const asyncDispatch = async (action) => {
+    if (action.type === "HOST_START_VOTING" && state.hostToken) {
+      try {
+        const updatedSession = await updateSession(
+          state.sessionId,
+          { stage: "voting" },
+          state.hostToken
+        );
+        dispatch({ type: "UPDATE_SESSION", payload: updatedSession });
+      } catch (error) {
+        console.error("Failed to start voting:", error);
+      }
+    } else if (action.type === "HOST_REVEAL" && state.hostToken) {
+      try {
+        // Fetch all ballots for this round
+        const ballots = await getRoundBallots(state.sessionId, state.round, state.hostToken);
+
+        // Convert ballot format to rankings array
+        const rankings = ballots.map(b => b.rankings);
+
+        // Calculate loser using existing voting logic
+        const currentCandidates = state.candidates;
+        const { loser, score } = weightedFindLoser(rankings, currentCandidates);
+
+        const newEliminated = [...(state.session.eliminated || []), loser];
+
+        if (currentCandidates.length === 2) {
+          // Final round - we have a winner
+          const winner = currentCandidates.find(c => c !== loser);
+          const updatedSession = await updateSession(
+            state.sessionId,
+            {
+              stage: "winner",
+              eliminated: newEliminated,
+              winner: winner,
+              score_history: [...(state.session.score_history || []), score]
+            },
+            state.hostToken
+          );
+          dispatch({
+            type: "SHOW_WINNER",
+            payload: { winner, loser, score, session: updatedSession }
+          });
+        } else {
+          // More rounds to go
+          const updatedSession = await updateSession(
+            state.sessionId,
+            {
+              stage: "eliminated",
+              eliminated: newEliminated,
+              score_history: [...(state.session.score_history || []), score]
+            },
+            state.hostToken
+          );
+          dispatch({
+            type: "SHOW_ELIMINATED",
+            payload: { loser, score, session: updatedSession }
+          });
+        }
+      } catch (error) {
+        console.error("Failed to reveal result:", error);
+      }
+    } else if (action.type === "NEXT_ROUND" && state.isHost && state.hostToken) {
+      try {
+        const updatedSession = await updateSession(
+          state.sessionId,
+          {
+            stage: "voting",
+            round: state.round + 1
+          },
+          state.hostToken
+        );
+        dispatch({ type: "NEXT_ROUND_SUPABASE", payload: updatedSession });
+      } catch (error) {
+        console.error("Failed to start next round:", error);
+        // Fallback to local state
+        dispatch(action);
+      }
+    } else {
+      dispatch(action);
+    }
+  };
+
   return (
-    <VotingContext.Provider value={{ state, dispatch }}>
+    <VotingContext.Provider value={{ state, dispatch: asyncDispatch }}>
       {children}
     </VotingContext.Provider>
   );

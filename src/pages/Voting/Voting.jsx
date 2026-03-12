@@ -8,12 +8,16 @@ import './Voting.scss';
 
 export function Voting() {
   const { state } = useVoting();
-  const { candidates, round, currentBallot, eliminatedHistory, voters } = state;
+  const { candidates, round, currentBallot, eliminatedHistory, voters, isHost, voterName } = state;
+
+  // For multi-device mode (Supabase), voters use their own name
+  // For local mode, use the current ballot index
+  const currentVoterName = voterName || voters[currentBallot];
 
   return (
     <section className="voting" aria-labelledby="voting-title">
       <Heading level={2} id="voting-title" className="voting__title">
-        {voters[currentBallot]}'s turn to vote
+        {currentVoterName}'s turn to vote
       </Heading>
 
       <Stepper
@@ -29,7 +33,7 @@ export function Voting() {
 
       <BallotForm
         candidates={candidates}
-        voterName={voters[currentBallot]}
+        voterName={currentVoterName}
       />
     </section>
   );

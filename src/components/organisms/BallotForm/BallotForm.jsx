@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useVoting } from "../../../context/votingContext.jsx";
+import { submitBallot } from "../../../services/ballotService";
 import { Card } from "../../molecules/Card/Card";
 import { FormField } from "../../molecules/FormField/FormField";
 import { Button } from "../../atoms/Button/Button";
@@ -7,9 +8,13 @@ import { Heading } from "../../atoms/Heading/Heading";
 import "./BallotForm.scss";
 
 function BallotForm({ candidates, voterName }) {
-  const { dispatch } = useVoting();
+  const { state, dispatch } = useVoting();
   const [rankings, setRankings] = useState(Array(candidates.length).fill(""));
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  // Check if this is a Supabase multi-device session (voter has sessionId and voterName, but no hostToken)
+  const isSupabaseVoter = state.sessionId && state.voterName && !state.isHost;
 
   useEffect(() => {
     setRankings(Array(candidates.length).fill(""));
@@ -26,7 +31,7 @@ function BallotForm({ candidates, voterName }) {
     setError("");
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const chosen = rankings.filter(r => r);
     const duplicates = chosen.filter((r, i) => chosen.indexOf(r) !== i);
@@ -43,7 +48,21 @@ function BallotForm({ candidates, voterName }) {
       return;
     }
     setError("");
-    dispatch({ type: "SUBMIT_BALLOT", payload: rankings });
+
+    if (isSupabaseVoter) {
+      // Submit to Supabase for multi-device mode
+      setSubmitting(true);
+      try {
+        await submitBallot(state.sessionId, state.round, voterName, rankings);
+        dispatch({ type: "VOTER_SUBMITTED" });
+      } catch (err) {
+        setError(err.message || "Failed to submit ballot. Please try again.");
+        setSubmitting(false);
+      }
+    } else {
+      // Local mode - dispatch to reducer
+      dispatch({ type: "SUBMIT_BALLOT", payload: rankings });
+    }
   }
 
   return (
@@ -70,6 +89,7 @@ function BallotForm({ candidates, voterName }) {
                   value={rankings[rankIdx]}
                   onChange={e => onChange(e, rankIdx)}
                   required
+                  disabled={submitting}
                   aria-describedby={error ? `ballot-error-${voterName}` : undefined}
                   aria-invalid={error ? "true" : "false"}
                 >
@@ -84,7 +104,7 @@ function BallotForm({ candidates, voterName }) {
             );
           })}
           {error && (
-            <div 
+            <div
               className="ballot-form__error"
               role="alert"
               id={`ballot-error-${voterName}`}
@@ -98,9 +118,10 @@ function BallotForm({ candidates, voterName }) {
             variant="primary"
             size="large"
             fullWidth
+            disabled={submitting}
             aria-label={`Submit ballot for ${voterName}`}
           >
-            Submit Ballot
+            {submitting ? "Submitting..." : "Submit Ballot"}
           </Button>
         </div>
       </form>
