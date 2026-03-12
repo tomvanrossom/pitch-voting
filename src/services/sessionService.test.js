@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { generateSessionCode, createSession } from './sessionService'
+import { generateSessionCode, createSession, joinSession, getSessionById } from './sessionService'
 
 // Mock supabase
 vi.mock('../lib/supabase', () => ({
@@ -55,5 +55,73 @@ describe('createSession', () => {
 
     expect(result.session).toEqual(mockSession)
     expect(result.hostToken).toBe('host-uuid')
+  })
+})
+
+describe('joinSession', () => {
+  it('fetches session by code', async () => {
+    const { supabase } = await import('../lib/supabase')
+
+    const mockSession = {
+      id: 'uuid-123',
+      code: 'ABC123',
+      voters: ['Alice', 'Bob'],
+      candidates: ['Option1', 'Option2'],
+      stage: 'setup'
+    }
+
+    supabase.from.mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({ data: mockSession, error: null })
+        })
+      })
+    })
+
+    const { joinSession } = await import('./sessionService')
+    const result = await joinSession('ABC123')
+
+    expect(result).toEqual(mockSession)
+  })
+
+  it('throws error for invalid code', async () => {
+    const { supabase } = await import('../lib/supabase')
+
+    supabase.from.mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({ data: null, error: { message: 'Not found' } })
+        })
+      })
+    })
+
+    const { joinSession } = await import('./sessionService')
+    await expect(joinSession('INVALID')).rejects.toThrow()
+  })
+})
+
+describe('getSessionById', () => {
+  it('fetches session by id', async () => {
+    const { supabase } = await import('../lib/supabase')
+
+    const mockSession = {
+      id: 'uuid-123',
+      code: 'ABC123',
+      voters: ['Alice', 'Bob'],
+      stage: 'voting'
+    }
+
+    supabase.from.mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({ data: mockSession, error: null })
+        })
+      })
+    })
+
+    const { getSessionById } = await import('./sessionService')
+    const result = await getSessionById('uuid-123')
+
+    expect(result.id).toBe('uuid-123')
   })
 })

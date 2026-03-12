@@ -37,3 +37,31 @@ export async function createSession(voters, candidates) {
     hostToken: data.host_token
   }
 }
+
+export async function joinSession(code) {
+  const { data, error } = await supabase
+    .from('sessions')
+    .select('id, code, voters, candidates, stage, round, current_voter, eliminated, score_history, winner')
+    .eq('code', code.toUpperCase())
+    .single()
+
+  if (error) {
+    throw new Error('Session not found')
+  }
+
+  return data
+}
+
+export async function getSessionById(sessionId) {
+  const { data, error } = await supabase
+    .from('sessions')
+    .select('id, code, voters, candidates, stage, round, current_voter, eliminated, score_history, winner')
+    .eq('id', sessionId)
+    .single()
+
+  if (error) {
+    throw new Error('Session not found')
+  }
+
+  return data
+}
