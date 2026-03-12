@@ -22,6 +22,17 @@ Replace localStorage persistence with Supabase to enable multi-device voting. On
 - Permanent history storage
 - Offline support
 
+## Deployment
+
+**GitHub Pages compatible** - The app remains a static SPA:
+
+- Supabase is a Backend-as-a-Service; all calls made from browser via JS SDK
+- Build output stays static (`npm run build` → `dist/`)
+- No server-side code required
+- Add `@supabase/supabase-js` package
+- Configure with public Supabase URL + anon key (safe to expose; RLS protects data)
+- Supabase free tier sufficient for this use case
+
 ---
 
 ## Database Schema
