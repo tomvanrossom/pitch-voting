@@ -10,7 +10,15 @@ export function QRCodeDisplay({ code, baseUrl, size = 160 }) {
       sx={{ m: 0, display: 'inline-block' }}
       aria-label={`QR code to join session ${code}`}
     >
-      <QRCodeSVG value={joinUrl} size={size} />
+      <a
+        href={joinUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ cursor: 'pointer', display: 'block' }}
+        title="Click to open join link in new window"
+      >
+        <QRCodeSVG value={joinUrl} size={size} />
+      </a>
     </Box>
   )
 }
