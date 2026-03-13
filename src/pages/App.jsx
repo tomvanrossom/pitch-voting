@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useVoting } from "../context/votingContext.jsx";
 import { VotingLayout } from "../components/templates/VotingLayout/VotingLayout";
 import { Configure } from "./Configure";
@@ -12,7 +12,7 @@ import { JoinSession } from "./JoinSession";
 import { HostDashboard } from "./HostDashboard";
 import { Lobby } from "./Lobby";
 import { VoterWaiting } from "./VoterWaiting";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography, Card } from "@mui/material";
 
 function Home({ onHost, onJoin }) {
   return (
@@ -29,6 +29,20 @@ function Home({ onHost, onJoin }) {
 export default function App() {
   const { state, dispatch } = useVoting();
   const { stage, round, currentBallot, loser, winner, isHost, voterName, session } = state;
+  const [joinCode, setJoinCode] = useState(null);
+
+  // Read ?join= parameter on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("join");
+    if (code) {
+      setJoinCode(code.toUpperCase());
+      // Clear the URL parameter
+      window.history.replaceState({}, "", window.location.pathname);
+      // Navigate to join session
+      dispatch({ type: "GOTO_JOIN_SESSION" });
+    }
+  }, [dispatch]);
 
   const getStageInfo = () => {
     if (stage === "home") return "Welcome";
@@ -60,9 +74,13 @@ export default function App() {
         } />
       )}
       {stage === "joinSession" && (
-        <JoinSession onSessionJoined={(session, voterName) =>
-          dispatch({ type: "SESSION_JOINED", payload: { session, voterName } })
-        } />
+        <JoinSession
+          initialCode={joinCode}
+          onSessionJoined={(session, voterName) => {
+            setJoinCode(null);
+            dispatch({ type: "SESSION_JOINED", payload: { session, voterName } });
+          }}
+        />
       )}
       {stage === "lobby" && (
         <Lobby
