@@ -15,12 +15,13 @@ export function JoinSession({ onSessionJoined, initialCode = '' }) {
   useEffect(() => {
     if (initialCode && !autoSubmitRan.current) {
       autoSubmitRan.current = true
-      // Trigger lookup directly
+      let cancelled = false
       setLoading(true)
       joinSession(initialCode)
-        .then(found => setSession(found))
-        .catch(() => setError('Session not found. Check your code.'))
-        .finally(() => setLoading(false))
+        .then(found => { if (!cancelled) setSession(found) })
+        .catch(() => { if (!cancelled) setError('Session not found. Check your code.') })
+        .finally(() => { if (!cancelled) setLoading(false) })
+      return () => { cancelled = true }
     }
   }, [initialCode])
 
