@@ -1,5 +1,6 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import '@testing-library/jest-dom'
 import { JoinSession } from './JoinSession'
 
 // Mock the session service
@@ -29,5 +30,87 @@ describe('JoinSession', () => {
     render(<JoinSession onSessionJoined={vi.fn()} />)
 
     expect(joinSession).not.toHaveBeenCalled()
+  })
+})
+
+describe('JoinSession voter selection', () => {
+  const mockSession = {
+    id: 'session-123',
+    voters: ['Alice', 'Bob', 'Charlie']
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    joinSession.mockResolvedValue(mockSession)
+  })
+
+  test('shows voter chips after session lookup', async () => {
+    render(<JoinSession onSessionJoined={vi.fn()} />)
+
+    fireEvent.change(screen.getByLabelText(/session code/i), { target: { value: 'ABC123' } })
+    fireEvent.click(screen.getByRole('button', { name: /find session/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText('Alice')).toBeInTheDocument()
+      expect(screen.getByText('Bob')).toBeInTheDocument()
+      expect(screen.getByText('Charlie')).toBeInTheDocument()
+    })
+  })
+
+  test('selecting a voter chip highlights it', async () => {
+    render(<JoinSession onSessionJoined={vi.fn()} />)
+
+    fireEvent.change(screen.getByLabelText(/session code/i), { target: { value: 'ABC123' } })
+    fireEvent.click(screen.getByRole('button', { name: /find session/i }))
+
+    await waitFor(() => screen.getByText('Alice'))
+
+    fireEvent.click(screen.getByText('Alice'))
+    expect(screen.getByText('Alice').closest('button')).toHaveClass('voter-chip--selected')
+  })
+
+  test('only one voter can be selected at a time', async () => {
+    render(<JoinSession onSessionJoined={vi.fn()} />)
+
+    fireEvent.change(screen.getByLabelText(/session code/i), { target: { value: 'ABC123' } })
+    fireEvent.click(screen.getByRole('button', { name: /find session/i }))
+
+    await waitFor(() => screen.getByText('Alice'))
+
+    fireEvent.click(screen.getByText('Alice'))
+    fireEvent.click(screen.getByText('Bob'))
+
+    expect(screen.getByText('Alice').closest('button')).not.toHaveClass('voter-chip--selected')
+    expect(screen.getByText('Bob').closest('button')).toHaveClass('voter-chip--selected')
+  })
+
+  test('join button disabled until voter selected', async () => {
+    render(<JoinSession onSessionJoined={vi.fn()} />)
+
+    fireEvent.change(screen.getByLabelText(/session code/i), { target: { value: 'ABC123' } })
+    fireEvent.click(screen.getByRole('button', { name: /find session/i }))
+
+    await waitFor(() => screen.getByText('Alice'))
+
+    const joinButton = screen.getByRole('button', { name: /join session/i })
+    expect(joinButton).toBeDisabled()
+
+    fireEvent.click(screen.getByText('Alice'))
+    expect(joinButton).toBeEnabled()
+  })
+
+  test('join button calls onSessionJoined with correct voter', async () => {
+    const onSessionJoined = vi.fn()
+    render(<JoinSession onSessionJoined={onSessionJoined} />)
+
+    fireEvent.change(screen.getByLabelText(/session code/i), { target: { value: 'ABC123' } })
+    fireEvent.click(screen.getByRole('button', { name: /find session/i }))
+
+    await waitFor(() => screen.getByText('Bob'))
+
+    fireEvent.click(screen.getByText('Bob'))
+    fireEvent.click(screen.getByRole('button', { name: /join session/i }))
+
+    expect(onSessionJoined).toHaveBeenCalledWith(mockSession, 'Bob')
   })
 })

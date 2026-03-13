@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { TextField, Button, Typography, Stack, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+import { TextField, Button, Typography, Stack } from '@mui/material'
 import { joinSession } from '../../services/sessionService'
 import { Card } from '../../components/molecules/Card/Card'
+import { VoterChip } from '../../components/molecules/VoterChip'
 
 export function JoinSession({ onSessionJoined, initialCode = '' }) {
   const [code, setCode] = useState(initialCode)
@@ -54,14 +55,16 @@ export function JoinSession({ onSessionJoined, initialCode = '' }) {
       <Card>
         <Typography variant="h5" gutterBottom>Select Your Name</Typography>
         <Stack spacing={2}>
-          <FormControl fullWidth>
-            <InputLabel>Who are you?</InputLabel>
-            <Select value={selectedVoter} label="Who are you?" onChange={(e) => setSelectedVoter(e.target.value)}>
-              {session.voters.map(voter => (
-                <MenuItem key={voter} value={voter}>{voter}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+            {session.voters.map(voter => (
+              <VoterChip
+                key={voter}
+                name={voter}
+                selected={selectedVoter === voter}
+                onSelect={setSelectedVoter}
+              />
+            ))}
+          </div>
           <Button variant="contained" onClick={handleJoin} disabled={!selectedVoter} fullWidth>
             Join Session
           </Button>
