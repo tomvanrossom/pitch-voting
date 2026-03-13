@@ -2,7 +2,7 @@ import React from 'react';
 import { useVoting } from '../../context/votingContext.jsx';
 import { Stepper } from '../../components/organisms/Stepper/Stepper';
 import { VotingInfoPanel } from '../../components/organisms/VotingInfoPanel/VotingInfoPanel';
-import BallotForm from '../../components/organisms/BallotForm/BallotForm';
+import { TapRankBallot } from '../../components/organisms/TapRankBallot';
 import { Heading } from '../../components/atoms/Heading/Heading';
 import './Voting.scss';
 
@@ -31,7 +31,7 @@ export function Voting() {
         eliminatedCandidates={eliminatedHistory}
       />
 
-      <BallotForm
+      <TapRankBallot
         candidates={candidates}
         voterName={currentVoterName}
       />
