@@ -21,24 +21,25 @@ describe('votingContext', () => {
       expect(Array.isArray(result.current.state.voters)).toBe(true);
     });
 
-    it('should initialize with configure stage when no config is saved', () => {
+    it('should initialize with home stage when no session is saved', () => {
       const { result } = renderHook(() => useVoting(), { wrapper });
 
-      expect(result.current.state.stage).toBe('configure');
+      // New Supabase flow starts at home screen
+      expect(result.current.state.stage).toBe('home');
     });
 
-    it('should initialize with setup stage when config is saved', () => {
-      const mockConfig = {
-        voters: ['Alice', 'Bob'],
-        candidates: ['Option1', 'Option2']
+    it('should initialize with lobby stage when voter session is saved', () => {
+      const voterSession = {
+        sessionId: 'test-session-id',
+        voterName: 'Alice'
       };
-      localStorage.setItem('voting-app-config', JSON.stringify(mockConfig));
+      localStorage.setItem('voter_session', JSON.stringify(voterSession));
 
       const { result } = renderHook(() => useVoting(), { wrapper });
 
-      expect(result.current.state.stage).toBe('setup');
-      expect(result.current.state.voters).toEqual(mockConfig.voters);
-      expect(result.current.state.candidates).toEqual(mockConfig.candidates);
+      expect(result.current.state.stage).toBe('lobby');
+      expect(result.current.state.sessionId).toBe('test-session-id');
+      expect(result.current.state.voterName).toBe('Alice');
     });
 
     it('should initialize with all candidates', () => {
@@ -407,7 +408,7 @@ describe('votingContext', () => {
         result.current.dispatch({ type: 'RESET' });
       });
 
-      expect(result.current.state.stage).toBe('configure');
+      expect(result.current.state.stage).toBe('home');
       expect(result.current.state.candidates).toEqual(OPTIONS);
       expect(result.current.state.round).toBe(1);
       expect(result.current.state.ballots).toEqual([]);
@@ -484,7 +485,7 @@ describe('votingContext', () => {
       act(() => {
         result.current.dispatch({ type: 'RESET' });
       });
-      expect(result.current.state.stage).toBe('configure');
+      expect(result.current.state.stage).toBe('home');
     });
 
     it('should maintain elimination history across rounds', () => {
@@ -695,8 +696,8 @@ describe('votingContext', () => {
       expect(savedConfig).toBeTruthy();
       expect(JSON.parse(savedConfig)).toEqual(mockConfig);
 
-      // State should be reset to initial state (with configure stage after RESET)
-      expect(testState.stage).toBe('configure');
+      // State should be reset to initial state (home stage after RESET)
+      expect(testState.stage).toBe('home');
       expect(testState.round).toBe(1);
       expect(testState.ballots).toEqual([]);
       expect(testState.winner).toBeNull();
@@ -761,10 +762,14 @@ describe('votingContext', () => {
     });
   });
 
-  describe('Backward Compatibility', () => {
-    test('app works with existing voting state (backward compatibility)', () => {
-      const existingState = {
-        stage: 'voting',
+  describe('Supabase Session Restore', () => {
+    test('restores host session with sessionId and hostToken', () => {
+      const hostState = {
+        stage: 'hostDashboard',
+        sessionId: 'test-session-id',
+        hostToken: 'test-host-token',
+        isHost: true,
+        session: { id: 'test-session-id', code: 'ABC123' },
         candidates: ['Option1', 'Option2'],
         voters: ['Alice', 'Bob'],
         round: 1,
@@ -777,7 +782,7 @@ describe('votingContext', () => {
         pendingAnnouncement: false
       };
 
-      localStorage.setItem('voting-app-state', JSON.stringify(existingState));
+      localStorage.setItem('voting-app-state', JSON.stringify(hostState));
 
       let testState;
 
@@ -793,11 +798,47 @@ describe('votingContext', () => {
         </VotingProvider>
       );
 
-      // Should load existing state
-      expect(testState.stage).toBe('voting');
-      expect(testState.candidates).toEqual(['Option1', 'Option2']);
-      expect(testState.voters).toEqual(['Alice', 'Bob']);
-      expect(testState.round).toBe(1);
+      // Should restore host session
+      expect(testState.stage).toBe('hostDashboard');
+      expect(testState.sessionId).toBe('test-session-id');
+      expect(testState.hostToken).toBe('test-host-token');
+      expect(testState.isHost).toBe(true);
+    });
+
+    test('legacy local-only state is cleared and starts at home', () => {
+      const legacyState = {
+        stage: 'voting',
+        candidates: ['Option1', 'Option2'],
+        voters: ['Alice', 'Bob'],
+        round: 1,
+        ballots: [],
+        currentBallot: 0,
+        eliminatedHistory: [],
+        scoreHistory: [],
+        loser: null,
+        winner: null,
+        pendingAnnouncement: false
+        // Note: no sessionId or hostToken
+      };
+
+      localStorage.setItem('voting-app-state', JSON.stringify(legacyState));
+
+      let testState;
+
+      function TestComponent() {
+        const { state } = useVoting();
+        testState = state;
+        return null;
+      }
+
+      render(
+        <VotingProvider>
+          <TestComponent />
+        </VotingProvider>
+      );
+
+      // Legacy state without sessionId/hostToken should be cleared
+      expect(testState.stage).toBe('home');
     });
   });
 });

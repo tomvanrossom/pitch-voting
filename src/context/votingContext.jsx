@@ -175,6 +175,41 @@ function votingReducer(state, action) {
     case "VOTER_SUBMITTED":
       return { ...state, stage: "voterSubmitted" };
 
+    case "VOTER_SESSION_UPDATE": {
+      const session = action.payload;
+      // Determine what stage the voter should see based on session state
+      if (session.stage === "winner") {
+        return {
+          ...state,
+          stage: "winner",
+          session,
+          winner: session.winner,
+          eliminatedHistory: session.eliminated || [],
+          scoreHistory: session.score_history || [],
+        };
+      } else if (session.stage === "eliminated") {
+        const lastEliminated = session.eliminated?.[session.eliminated.length - 1];
+        return {
+          ...state,
+          stage: "eliminated",
+          session,
+          loser: lastEliminated,
+          eliminatedHistory: session.eliminated || [],
+          scoreHistory: session.score_history || [],
+        };
+      } else if (session.stage === "voting") {
+        // Next round started, voter needs to vote again
+        return {
+          ...state,
+          stage: "voting",
+          session,
+          round: session.round,
+          candidates: session.candidates.filter(c => !(session.eliminated || []).includes(c)),
+        };
+      }
+      return state;
+    }
+
     case "UPDATE_SESSION":
       return {
         ...state,

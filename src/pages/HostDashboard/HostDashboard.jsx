@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Typography, Stack, Button, Chip, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
@@ -7,7 +7,12 @@ import { useRealtimeBallots } from '../../hooks/useRealtimeBallots'
 
 export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
   const isVoting = session.stage === 'voting'
-  const { ballotCount, votersSubmitted } = useRealtimeBallots(session.id, isVoting)
+  const { ballotCount, votersSubmitted, reset } = useRealtimeBallots(session.id, isVoting)
+
+  // Reset ballot count when round changes
+  useEffect(() => {
+    reset()
+  }, [session.round])
   const allVotesIn = ballotCount >= session.voters.length
 
   return (

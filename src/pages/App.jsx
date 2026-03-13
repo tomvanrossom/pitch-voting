@@ -11,8 +11,8 @@ import { CreateSession } from "./CreateSession";
 import { JoinSession } from "./JoinSession";
 import { HostDashboard } from "./HostDashboard";
 import { Lobby } from "./Lobby";
+import { VoterWaiting } from "./VoterWaiting";
 import { Button, Stack, Typography } from "@mui/material";
-import { Card } from "../components/molecules/Card/Card";
 
 function Home({ onHost, onJoin }) {
   return (
@@ -83,10 +83,11 @@ export default function App() {
       {stage === "setup" && <Setup />}
       {stage === "voting" && <Voting />}
       {stage === "voterSubmitted" && (
-        <Card>
-          <Typography variant="h5" align="center">Vote Submitted!</Typography>
-          <Typography align="center" color="text.secondary">Waiting for other voters...</Typography>
-        </Card>
+        <VoterWaiting
+          sessionId={state.sessionId}
+          voterName={voterName}
+          onSessionUpdate={(session) => dispatch({ type: "VOTER_SESSION_UPDATE", payload: session })}
+        />
       )}
       {stage === "announce" && <Announce />}
       {stage === "eliminated" && <Eliminated />}
