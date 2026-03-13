@@ -1,0 +1,33 @@
+.tap-rank-ballot {
+  &__title {
+    margin-bottom: 8px;
+  }
+
+  &__instruction {
+    color: #666;
+    margin-bottom: 16px;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  &__progress {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  &__error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+}
