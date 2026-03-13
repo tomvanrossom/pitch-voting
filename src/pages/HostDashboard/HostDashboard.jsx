@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import { Typography, Stack, Button, Chip, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
+import { Typography, Stack, Button, Chip, List, ListItem, ListItemIcon, ListItemText, Box } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { Card } from '../../components/molecules/Card/Card'
 import { useRealtimeBallots } from '../../hooks/useRealtimeBallots'
+import { QRCodeDisplay } from '../../components/molecules/QRCodeDisplay'
 
 export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
   const isVoting = session.stage === 'voting'
@@ -18,12 +19,24 @@ export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
   return (
     <Card>
       <Stack spacing={3}>
-        <div>
-          <Typography variant="h5">Host Dashboard</Typography>
-          <Typography color="text.secondary">
-            Share code: <Chip label={session.code} color="primary" />
+        <Typography variant="h5">Host Dashboard</Typography>
+
+        <Box
+          sx={{
+            textAlign: 'center',
+            p: 2,
+            bgcolor: 'grey.100',
+            borderRadius: 2,
+          }}
+        >
+          <QRCodeDisplay
+            code={session.code}
+            baseUrl={window.location.origin + import.meta.env.BASE_URL}
+          />
+          <Typography sx={{ mt: 1 }}>
+            Scan to join or enter: <strong>{session.code}</strong>
           </Typography>
-        </div>
+        </Box>
 
         {session.stage === 'setup' && (
           <Button variant="contained" onClick={onStartVoting} fullWidth>
