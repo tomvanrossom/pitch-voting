@@ -133,7 +133,13 @@ function votingReducer(state, action) {
       return { ...state, stage: "createSession" };
 
     case "GOTO_JOIN_SESSION":
-      return { ...state, stage: "joinSession" };
+      // Clear host state when switching to join mode (important for same-browser host+voter)
+      return {
+        ...state,
+        stage: "joinSession",
+        isHost: false,
+        hostToken: null,
+      };
 
     case "SESSION_CREATED":
       return {

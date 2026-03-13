@@ -36,6 +36,8 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("join");
     if (code) {
+      // Clear any stale voter session to start fresh
+      localStorage.removeItem('voter_session');
       setJoinCode(code.toUpperCase());
       // Clear the URL parameter
       window.history.replaceState({}, "", window.location.pathname);
