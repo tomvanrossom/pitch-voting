@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Typography, Stack, Button, Chip, List, ListItem, ListItemIcon, ListItemText, Box } from '@mui/material'
+import { Typography, Stack, Button, List, ListItem, ListItemIcon, ListItemText, Box } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { Card } from '../../components/molecules/Card/Card'
