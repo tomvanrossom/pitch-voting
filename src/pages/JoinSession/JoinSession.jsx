@@ -1,14 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { TextField, Button, Typography, Stack, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { joinSession } from '../../services/sessionService'
 import { Card } from '../../components/molecules/Card/Card'
 
-export function JoinSession({ onSessionJoined }) {
-  const [code, setCode] = useState('')
+export function JoinSession({ onSessionJoined, initialCode = '' }) {
+  const [code, setCode] = useState(initialCode)
   const [session, setSession] = useState(null)
   const [selectedVoter, setSelectedVoter] = useState('')
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+  const autoSubmitRan = useRef(false)
+
+  // Auto-submit if initialCode is provided
+  useEffect(() => {
+    if (initialCode && !autoSubmitRan.current) {
+      autoSubmitRan.current = true
+      // Trigger lookup directly
+      setLoading(true)
+      joinSession(initialCode)
+        .then(found => setSession(found))
+        .catch(() => setError('Session not found. Check your code.'))
+        .finally(() => setLoading(false))
+    }
+  }, [initialCode])
 
   const handleLookup = async (e) => {
     e.preventDefault()
