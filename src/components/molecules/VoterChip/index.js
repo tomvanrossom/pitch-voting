@@ -1,0 +1,1 @@
+export { VoterChip } from './VoterChip'

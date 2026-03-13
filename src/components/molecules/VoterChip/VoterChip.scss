@@ -1,0 +1,29 @@
+.voter-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  min-height: 48px;
+  border: none;
+  border-radius: 24px;
+  background: #e0e0e0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &--selected {
+    background: #4caf50;
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
