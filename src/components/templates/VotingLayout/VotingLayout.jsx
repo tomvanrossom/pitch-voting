@@ -31,7 +31,7 @@ export function VotingLayout({ children, stageInfo }) {
         <div className="voting-layout__header-container">
           <Heading level={1} className="voting-layout__title">
             <Icon emoji="🗳️" label="voting ballot" size="large" />
-            {' '}2025 Pitch Voting
+            {' '}Ranked Choice Voting
           </Heading>
           {state.phase && (
             <div className="voting-layout__subtitle">
@@ -50,7 +50,7 @@ export function VotingLayout({ children, stageInfo }) {
 
       <footer className="voting-layout__footer">
         <p>
-          &copy; {new Date().getFullYear()} 2025 Pitch Voting
+          &copy; {new Date().getFullYear()} Ranked Choice Voting
           {' | '}
           <a href="#" onClick={handleReset} style={{ color: 'inherit' }}>Reset Session</a>
         </p>
