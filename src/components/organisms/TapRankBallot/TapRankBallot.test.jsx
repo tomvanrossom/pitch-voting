@@ -34,10 +34,10 @@ describe('TapRankBallot', () => {
     render(<TapRankBallot candidates={candidates} voterName={voterName} />)
 
     fireEvent.click(screen.getByText('Malta'))
-    expect(screen.getByText('1')).toBeInTheDocument()
+    expect(screen.getByLabelText('Malta, ranked 1')).toBeInTheDocument()
 
     fireEvent.click(screen.getByText('Albanie'))
-    expect(screen.getByText('2')).toBeInTheDocument()
+    expect(screen.getByLabelText('Albanie, ranked 2')).toBeInTheDocument()
   })
 
   test('tapping ranked candidate removes rank and shifts others', () => {
@@ -79,17 +79,9 @@ describe('TapRankBallot', () => {
     expect(submitButton).toBeEnabled()
   })
 
-  test('shows progress indicator including auto-completed', () => {
+  test('shows instruction text', () => {
     render(<TapRankBallot candidates={candidates} voterName={voterName} />)
-
-    expect(screen.getByText('0 of 3 ranked')).toBeInTheDocument()
-
-    fireEvent.click(screen.getByText('Malta'))
-    expect(screen.getByText('1 of 3 ranked')).toBeInTheDocument()
-
-    // Second tap triggers auto-complete, showing 3 of 3
-    fireEvent.click(screen.getByText('Albanie'))
-    expect(screen.getByText('3 of 3 ranked')).toBeInTheDocument()
+    expect(screen.getByText('Tap candidates in order of preference')).toBeInTheDocument()
   })
 
   test('produces correct rankings array on submit', () => {

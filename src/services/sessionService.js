@@ -42,7 +42,7 @@ export async function createSession(voters, candidates) {
 export async function joinSession(code) {
   const { data, error } = await supabase
     .from('sessions')
-    .select('id, code, voters, candidates, stage, round, current_voter, eliminated, score_history, winner')
+    .select('id, code, voters, candidates, stage, round, current_voter, eliminated, score_history, winner, joined_voters')
     .eq('code', code.toUpperCase())
     .single()
 
@@ -56,12 +56,45 @@ export async function joinSession(code) {
 export async function getSessionById(sessionId) {
   const { data, error } = await supabase
     .from('sessions')
-    .select('id, code, voters, candidates, stage, round, current_voter, eliminated, score_history, winner')
+    .select('id, code, voters, candidates, stage, round, current_voter, eliminated, score_history, winner, joined_voters')
     .eq('id', sessionId)
     .single()
 
   if (error) {
     throw new Error('Session not found')
+  }
+
+  return data
+}
+
+export async function registerVoterJoined(sessionId, voterName) {
+  // First get current joined_voters
+  const { data: session, error: fetchError } = await supabase
+    .from('sessions')
+    .select('joined_voters')
+    .eq('id', sessionId)
+    .single()
+
+  if (fetchError) {
+    throw new Error('Failed to fetch session: ' + fetchError.message)
+  }
+
+  const currentJoined = session.joined_voters || []
+
+  // Don't add if already joined
+  if (currentJoined.includes(voterName)) {
+    return session
+  }
+
+  const { data, error } = await supabase
+    .from('sessions')
+    .update({ joined_voters: [...currentJoined, voterName] })
+    .eq('id', sessionId)
+    .select()
+    .single()
+
+  if (error) {
+    throw new Error('Failed to register voter: ' + error.message)
   }
 
   return data

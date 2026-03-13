@@ -1,19 +1,40 @@
-import React, { useEffect } from 'react'
-import { Typography, Stack, Button, List, ListItem, ListItemIcon, ListItemText, Box } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Typography, Stack, Button, List, ListItem, ListItemIcon, ListItemText, Box, Chip } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import PersonIcon from '@mui/icons-material/Person'
 import { Card } from '../../components/molecules/Card/Card'
 import { useRealtimeBallots } from '../../hooks/useRealtimeBallots'
 import { QRCodeDisplay } from '../../components/molecules/QRCodeDisplay'
+import { getSessionById } from '../../services/sessionService'
 
 export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
   const isVoting = session.stage === 'voting'
   const { ballotCount, votersSubmitted, reset } = useRealtimeBallots(session.id, isVoting)
+  const [joinedVoters, setJoinedVoters] = useState(session.joined_voters || [])
 
   // Reset ballot count when round changes
   useEffect(() => {
     reset()
   }, [session.round])
+
+  // Poll for joined voters during setup
+  useEffect(() => {
+    if (session.stage !== 'setup') return
+
+    const pollJoined = async () => {
+      try {
+        const data = await getSessionById(session.id)
+        setJoinedVoters(data.joined_voters || [])
+      } catch (err) {
+        console.error('Failed to poll joined voters:', err)
+      }
+    }
+
+    pollJoined()
+    const interval = setInterval(pollJoined, 3000)
+    return () => clearInterval(interval)
+  }, [session.id, session.stage])
   const allVotesIn = ballotCount >= session.voters.length
 
   return (
@@ -39,9 +60,31 @@ export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
         </Box>
 
         {session.stage === 'setup' && (
-          <Button variant="contained" onClick={onStartVoting} fullWidth>
-            Start Voting (Round {session.round})
-          </Button>
+          <>
+            <Box>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                <PersonIcon fontSize="small" sx={{ verticalAlign: 'middle', mr: 0.5 }} />
+                Joined ({joinedVoters.length}/{session.voters.length})
+              </Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                {session.voters.map(voter => {
+                  const hasJoined = joinedVoters.includes(voter)
+                  return (
+                    <Chip
+                      key={voter}
+                      label={voter}
+                      color={hasJoined ? 'success' : 'default'}
+                      variant={hasJoined ? 'filled' : 'outlined'}
+                      size="small"
+                    />
+                  )
+                })}
+              </Stack>
+            </Box>
+            <Button variant="contained" onClick={onStartVoting} fullWidth>
+              Start Voting (Round {session.round})
+            </Button>
+          </>
         )}
 
         {isVoting && (

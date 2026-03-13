@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Typography, CircularProgress, Stack } from '@mui/material'
 import { Card } from '../../components/molecules/Card/Card'
-import { getSessionById } from '../../services/sessionService'
+import { getSessionById, registerVoterJoined } from '../../services/sessionService'
 
 export function Lobby({ sessionId, voterName, onSessionStart }) {
   const [session, setSession] = useState(null)
+
+  // Register voter as joined when entering lobby
+  useEffect(() => {
+    registerVoterJoined(sessionId, voterName).catch(err => {
+      console.error('Failed to register voter:', err)
+    })
+  }, [sessionId, voterName])
 
   useEffect(() => {
     const pollSession = async () => {

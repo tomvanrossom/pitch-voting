@@ -2,15 +2,14 @@
 
 .voting-info-panel {
   margin: $spacing-lg 0;
-  
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+
   &__section {
-    margin-bottom: $spacing-md;
-    
-    &:last-child {
-      margin-bottom: 0;
-    }
+    margin-bottom: 0;
   }
-  
+
   &__label {
     margin-bottom: $spacing-sm;
     font-size: $font-size-sm;

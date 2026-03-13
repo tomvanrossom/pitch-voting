@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { motion, LayoutGroup } from 'framer-motion'
 import { useVoting } from '../../../context/votingContext.jsx'
 import { submitBallot } from '../../../services/ballotService'
 import { Card } from '../../molecules/Card/Card'
 import { CandidateChip } from '../../molecules/CandidateChip'
 import { Button } from '../../atoms/Button/Button'
-import { Heading } from '../../atoms/Heading/Heading'
 import './TapRankBallot.scss'
 
 export function TapRankBallot({ candidates, voterName }) {
@@ -80,30 +80,39 @@ export function TapRankBallot({ candidates, voterName }) {
 
   return (
     <Card className="tap-rank-ballot" padding="large">
-      <Heading level={2} className="tap-rank-ballot__title">
-        {voterName}'s Ballot
-      </Heading>
-
       <p className="tap-rank-ballot__instruction">
         Tap candidates in order of preference
       </p>
 
       <form onSubmit={handleSubmit}>
-        <div className="tap-rank-ballot__chips">
-          {candidates.map(candidate => (
-            <CandidateChip
-              key={candidate}
-              name={candidate}
-              rank={getRank(candidate)}
-              onTap={handleTap}
-              disabled={submitting}
-            />
-          ))}
-        </div>
-
-        <p className="tap-rank-ballot__progress">
-          {rankings.length} of {candidates.length} ranked
-        </p>
+        <LayoutGroup>
+          <div className="tap-rank-ballot__chips">
+            {[...candidates]
+              .sort((a, b) => {
+                const rankA = getRank(a)
+                const rankB = getRank(b)
+                // Ranked items first, sorted by rank; unranked items after
+                if (rankA && rankB) return rankA - rankB
+                if (rankA) return -1
+                if (rankB) return 1
+                return 0
+              })
+              .map(candidate => (
+                <motion.div
+                  key={candidate}
+                  layout
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                >
+                  <CandidateChip
+                    name={candidate}
+                    rank={getRank(candidate)}
+                    onTap={handleTap}
+                    disabled={submitting}
+                  />
+                </motion.div>
+              ))}
+          </div>
+        </LayoutGroup>
 
         {error && (
           <div className="tap-rank-ballot__error" role="alert">

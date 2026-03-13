@@ -11,8 +11,7 @@ export function CandidateChip({ name, rank, onTap, disabled = false }) {
       disabled={disabled}
       aria-label={isRanked ? `${name}, ranked ${rank}` : `${name}, not ranked`}
     >
-      {isRanked && <span className="candidate-chip__badge">{rank}</span>}
-      <span className="candidate-chip__name">{name}</span>
+      {name}
     </button>
   )
 }

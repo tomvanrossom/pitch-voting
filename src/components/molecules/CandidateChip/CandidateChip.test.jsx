@@ -9,14 +9,14 @@ describe('CandidateChip', () => {
     expect(screen.getByText('Malta')).toBeInTheDocument()
   })
 
-  test('shows rank badge when ranked', () => {
+  test('has accessible label with rank when ranked', () => {
     render(<CandidateChip name="Malta" rank={1} onTap={vi.fn()} />)
-    expect(screen.getByText('1')).toBeInTheDocument()
+    expect(screen.getByLabelText('Malta, ranked 1')).toBeInTheDocument()
   })
 
-  test('does not show rank badge when unranked', () => {
+  test('has accessible label without rank when unranked', () => {
     render(<CandidateChip name="Malta" onTap={vi.fn()} />)
-    expect(screen.queryByText('1')).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Malta, not ranked')).toBeInTheDocument()
   })
 
   test('calls onTap with candidate name when clicked', () => {
