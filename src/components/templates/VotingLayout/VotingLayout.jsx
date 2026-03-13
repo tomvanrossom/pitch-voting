@@ -5,7 +5,14 @@ import { Icon } from '../../atoms/Icon/Icon';
 import './VotingLayout.scss';
 
 export function VotingLayout({ children, stageInfo }) {
-  const { state } = useVoting();
+  const { state, dispatch } = useVoting();
+
+  const handleReset = (e) => {
+    e.preventDefault();
+    if (window.confirm('Reset session? This will clear all data.')) {
+      dispatch({ type: 'RESET' });
+    }
+  };
 
   const getPhaseText = () => {
     switch(state.phase) {
@@ -42,7 +49,11 @@ export function VotingLayout({ children, stageInfo }) {
       </main>
 
       <footer className="voting-layout__footer">
-        <p>&copy; {new Date().getFullYear()} 2025 Pitch Voting - Built with React & SCSS</p>
+        <p>
+          &copy; {new Date().getFullYear()} 2025 Pitch Voting
+          {' | '}
+          <a href="#" onClick={handleReset} style={{ color: 'inherit' }}>Reset Session</a>
+        </p>
       </footer>
     </div>
   );
