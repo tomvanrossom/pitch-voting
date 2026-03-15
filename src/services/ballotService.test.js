@@ -3,7 +3,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // Mock supabase
 vi.mock('../lib/supabase', () => ({
   supabase: {
-    from: vi.fn()
+    from: vi.fn(),
+    rpc: vi.fn()
   }
 }))
 
@@ -28,32 +29,26 @@ describe('submitBallot', () => {
       rankings: ['Option1', 'Option2']
     }
 
-    supabase.from.mockReturnValue({
-      insert: vi.fn().mockReturnValue({
-        select: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ data: mockBallot, error: null })
-        })
-      })
-    })
+    supabase.rpc.mockResolvedValue({ data: mockBallot, error: null })
 
     const { submitBallot } = await import('./ballotService')
     const result = await submitBallot('session-uuid', 1, 'Alice', ['Option1', 'Option2'])
 
     expect(result).toEqual(mockBallot)
+    expect(supabase.rpc).toHaveBeenCalledWith('insert_ballot', {
+      p_session_id: 'session-uuid',
+      p_round: 1,
+      p_voter_name: 'Alice',
+      p_rankings: ['Option1', 'Option2']
+    })
   })
 
   it('throws error on duplicate submission', async () => {
     const { supabase } = await import('../lib/supabase')
 
-    supabase.from.mockReturnValue({
-      insert: vi.fn().mockReturnValue({
-        select: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: null,
-            error: { code: '23505', message: 'duplicate' }
-          })
-        })
-      })
+    supabase.rpc.mockResolvedValue({
+      data: null,
+      error: { code: '23505', message: 'duplicate' }
     })
 
     const { submitBallot } = await import('./ballotService')

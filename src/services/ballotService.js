@@ -3,15 +3,12 @@ import { createHostClient } from '../utils/supabaseHelpers'
 
 export async function submitBallot(sessionId, round, voterName, rankings) {
   const { data, error } = await supabase
-    .from('ballots')
-    .insert({
-      session_id: sessionId,
-      round,
-      voter_name: voterName,
-      rankings
+    .rpc('insert_ballot', {
+      p_session_id: sessionId,
+      p_round: round,
+      p_voter_name: voterName,
+      p_rankings: rankings
     })
-    .select()
-    .single()
 
   if (error) {
     if (error.code === '23505') {
