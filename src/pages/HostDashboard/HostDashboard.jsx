@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Stack, Button, List, ListItem, ListItemIcon, ListItemText, Box, Chip } from '@mui/material'
+import { Typography, Stack, Button, List, ListItem, ListItemIcon, ListItemText, Box, Chip, Collapse } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import PersonIcon from '@mui/icons-material/Person'
@@ -36,28 +36,31 @@ export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
     return () => clearInterval(interval)
   }, [session.id, session.stage])
   const allVotesIn = ballotCount >= session.voters.length
+  const allJoined = joinedVoters.length >= session.voters.length
 
   return (
     <Card>
       <Stack spacing={3}>
         <Typography variant="h5">Host Dashboard</Typography>
 
-        <Box
-          sx={{
-            textAlign: 'center',
-            p: 2,
-            bgcolor: 'grey.100',
-            borderRadius: 2,
-          }}
-        >
-          <QRCodeDisplay
-            code={session.code}
-            baseUrl={window.location.origin + import.meta.env.BASE_URL}
-          />
-          <Typography sx={{ mt: 1 }}>
-            Scan to join or enter: <strong>{session.code}</strong>
-          </Typography>
-        </Box>
+        <Collapse in={!allJoined || session.stage !== 'setup'}>
+          <Box
+            sx={{
+              textAlign: 'center',
+              p: 2,
+              bgcolor: 'grey.100',
+              borderRadius: 2,
+            }}
+          >
+            <QRCodeDisplay
+              code={session.code}
+              baseUrl={window.location.origin + import.meta.env.BASE_URL}
+            />
+            <Typography sx={{ mt: 1 }}>
+              Scan to join or enter: <strong>{session.code}</strong>
+            </Typography>
+          </Box>
+        </Collapse>
 
         {session.stage === 'setup' && (
           <>
