@@ -21,16 +21,6 @@ export function TapRankBallot({ candidates, voterName }) {
     setError('')
   }, [candidates, voterName])
 
-  // Auto-complete last candidate
-  useEffect(() => {
-    if (rankings.length === candidates.length - 1) {
-      const remaining = candidates.find(c => !rankings.includes(c))
-      if (remaining) {
-        setRankings(prev => [...prev, remaining])
-      }
-    }
-  }, [rankings, candidates])
-
   function handleTap(name) {
     if (submitting) return
     setError('')
@@ -40,7 +30,7 @@ export function TapRankBallot({ candidates, voterName }) {
       // Remove from rankings
       setRankings(prev => prev.filter(c => c !== name))
     } else {
-      // Add to rankings (unless auto-complete will kick in)
+      // Add to rankings
       if (rankings.length < candidates.length) {
         setRankings(prev => [...prev, name])
       }

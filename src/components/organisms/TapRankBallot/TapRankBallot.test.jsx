@@ -55,26 +55,16 @@ describe('TapRankBallot', () => {
     expect(albanieChip).toBeInTheDocument()
   })
 
-  test('auto-completes last candidate when N-1 are ranked', () => {
-    render(<TapRankBallot candidates={candidates} voterName={voterName} />)
-
-    // Rank 2 of 3 candidates
-    fireEvent.click(screen.getByText('Malta'))
-    fireEvent.click(screen.getByText('Albanie'))
-
-    // Taghazout should auto-complete as rank 3
-    expect(screen.getByLabelText(/Taghazout, ranked 3/)).toBeInTheDocument()
-  })
-
   test('submit button disabled until all ranked', () => {
     render(<TapRankBallot candidates={candidates} voterName={voterName} />)
 
     const submitButton = screen.getByRole('button', { name: /submit/i })
     expect(submitButton).toBeDisabled()
 
-    // Rank all candidates (2 taps, last auto-completes)
+    // Rank all candidates
     fireEvent.click(screen.getByText('Malta'))
     fireEvent.click(screen.getByText('Albanie'))
+    fireEvent.click(screen.getByText('Taghazout'))
 
     expect(submitButton).toBeEnabled()
   })
@@ -87,9 +77,10 @@ describe('TapRankBallot', () => {
   test('produces correct rankings array on submit', () => {
     render(<TapRankBallot candidates={candidates} voterName={voterName} />)
 
-    // Rank in specific order: Albanie first, then Malta (Taghazout auto-completes)
+    // Rank in specific order
     fireEvent.click(screen.getByText('Albanie'))
     fireEvent.click(screen.getByText('Malta'))
+    fireEvent.click(screen.getByText('Taghazout'))
 
     fireEvent.click(screen.getByRole('button', { name: /submit/i }))
 
