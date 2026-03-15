@@ -30,14 +30,13 @@
   
   &__cell {
     padding: $spacing-sm $spacing-md;
-    text-align: left;
-    
+    text-align: center;
+
     &--header {
       font-weight: 600;
       color: $color-heading-secondary;
-      text-align: center;
     }
-    
+
     &:first-child {
       font-weight: 500;
     }

@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "Gerangschikte Stemming"
+  },
+  "home": {
+    "hostSession": "Sessie Hosten",
+    "joinSession": "Sessie Deelnemen"
+  },
+  "createSession": {
+    "title": "Sessie Aanmaken",
+    "votersLabel": "Stemmers",
+    "votersPlaceholder": "Voeg stemmer toe",
+    "candidatesLabel": "Kandidaten",
+    "candidatesPlaceholder": "Voeg kandidaat toe",
+    "createButton": "Sessie Aanmaken"
+  },
+  "joinSession": {
+    "title": "Sessie Deelnemen",
+    "codePlaceholder": "Voer sessiecode in",
+    "codeLabel": "Sessiecode",
+    "selectVoter": "Selecteer je naam",
+    "joinButton": "Deelnemen"
+  },
+  "lobby": {
+    "welcome": "Welkom, {{name}}!",
+    "waiting": "Wachten tot host de stemming start...",
+    "votersAndCandidates": "{{voters}} stemmers, {{candidates}} kandidaten"
+  },
+  "hostDashboard": {
+    "title": "Host Dashboard",
+    "scanToJoin": "Scan om deel te nemen of voer in:",
+    "joined": "Deelgenomen",
+    "startVoting": "Start Stemming (Ronde {{round}})",
+    "roundWaiting": "Ronde {{round}} - Wachten op stemmen",
+    "votesReceived": "{{count}}/{{total}} stemmen ontvangen",
+    "revealResult": "Resultaat Tonen",
+    "waitingForVotes": "Wachten op alle stemmen..."
+  },
+  "voting": {
+    "instruction": "Tik kandidaten aan in volgorde van voorkeur",
+    "submitBallot": "Stem Indienen",
+    "submitting": "Indienen..."
+  },
+  "voterWaiting": {
+    "submitted": "Stem Ingediend!",
+    "waiting": "Wachten op andere stemmers, {{name}}...",
+    "resultsWillAppear": "Resultaten verschijnen automatisch wanneer onthuld."
+  },
+  "eliminated": {
+    "eliminatedThisRound": "Afgevallen deze ronde:",
+    "nextRound": "Volgende Ronde",
+    "waitingForHost": "Wachten tot host volgende ronde start..."
+  },
+  "winner": {
+    "theWinnerIs": "De winnaar is:",
+    "congratulations": "Gefeliciteerd!",
+    "viewResults": "Bekijk Resultaten",
+    "startNew": "Nieuwe Sessie Starten"
+  },
+  "results": {
+    "title": "Resultaten",
+    "round": "Ronde {{round}}",
+    "eliminated": "Afgevallen"
+  },
+  "footer": {
+    "resetSession": "Sessie Resetten",
+    "language": "Taal"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Fout",
+    "cancel": "Annuleren",
+    "confirm": "Bevestigen",
+    "resetConfirm": "Sessie resetten? Dit zal alle data wissen."
+  }
+}

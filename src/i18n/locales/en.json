@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "Ranked Choice Voting"
+  },
+  "home": {
+    "hostSession": "Host a Session",
+    "joinSession": "Join a Session"
+  },
+  "createSession": {
+    "title": "Create Session",
+    "votersLabel": "Voters",
+    "votersPlaceholder": "Add voter name",
+    "candidatesLabel": "Candidates",
+    "candidatesPlaceholder": "Add candidate name",
+    "createButton": "Create Session"
+  },
+  "joinSession": {
+    "title": "Join Session",
+    "codePlaceholder": "Enter session code",
+    "codeLabel": "Session Code",
+    "selectVoter": "Select your name",
+    "joinButton": "Join Session"
+  },
+  "lobby": {
+    "welcome": "Welcome, {{name}}!",
+    "waiting": "Waiting for host to start voting...",
+    "votersAndCandidates": "{{voters}} voters, {{candidates}} candidates"
+  },
+  "hostDashboard": {
+    "title": "Host Dashboard",
+    "scanToJoin": "Scan to join or enter:",
+    "joined": "Joined",
+    "startVoting": "Start Voting (Round {{round}})",
+    "roundWaiting": "Round {{round}} - Waiting for votes",
+    "votesReceived": "{{count}}/{{total}} votes received",
+    "revealResult": "Reveal Result",
+    "waitingForVotes": "Waiting for all votes..."
+  },
+  "voting": {
+    "instruction": "Tap candidates in order of preference",
+    "submitBallot": "Submit Ballot",
+    "submitting": "Submitting..."
+  },
+  "voterWaiting": {
+    "submitted": "Vote Submitted!",
+    "waiting": "Waiting for other voters, {{name}}...",
+    "resultsWillAppear": "Results will appear automatically when revealed."
+  },
+  "eliminated": {
+    "eliminatedThisRound": "Eliminated this round:",
+    "nextRound": "Next Round",
+    "waitingForHost": "Waiting for host to start next round..."
+  },
+  "winner": {
+    "theWinnerIs": "The winner is:",
+    "congratulations": "Congratulations!",
+    "viewResults": "View Results",
+    "startNew": "Start New Session"
+  },
+  "results": {
+    "title": "Results",
+    "round": "Round {{round}}",
+    "eliminated": "Eliminated"
+  },
+  "footer": {
+    "resetSession": "Reset Session",
+    "language": "Language"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "resetConfirm": "Reset session? This will clear all data."
+  }
+}

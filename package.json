@@ -17,9 +17,11 @@
     "@mui/material": "^7.1.1",
     "@supabase/supabase-js": "^2.99.1",
     "framer-motion": "^12.36.0",
+    "i18next": "^25.8.18",
     "qrcode.react": "^4.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^16.5.8",
     "sass": "^1.97.1",
     "web-vitals": "^2.1.4"
   },
