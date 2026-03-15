@@ -3,7 +3,7 @@ import { Typography, CircularProgress, Stack } from '@mui/material'
 import { Card } from '../../components/molecules/Card/Card'
 import { getSessionById } from '../../services/sessionService'
 
-export function VoterWaiting({ sessionId, voterName, onSessionUpdate }) {
+export function VoterWaiting({ sessionId, voterName, currentRound, onSessionUpdate }) {
   const [polling, setPolling] = useState(true)
 
   useEffect(() => {
@@ -18,8 +18,8 @@ export function VoterWaiting({ sessionId, voterName, onSessionUpdate }) {
           setPolling(false)
           onSessionUpdate(session)
         }
-        // Check if moved to next round (back to voting)
-        else if (session.stage === 'voting' && session.round > 1) {
+        // Check if moved to next round (session round is higher than when voter submitted)
+        else if (session.stage === 'voting' && session.round > currentRound) {
           setPolling(false)
           onSessionUpdate(session)
         }
@@ -32,7 +32,7 @@ export function VoterWaiting({ sessionId, voterName, onSessionUpdate }) {
     const interval = setInterval(pollSession, 2000)
 
     return () => clearInterval(interval)
-  }, [sessionId, onSessionUpdate])
+  }, [sessionId, currentRound, onSessionUpdate])
 
   return (
     <Card>

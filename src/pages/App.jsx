@@ -106,6 +106,7 @@ export default function App() {
         <VoterWaiting
           sessionId={state.sessionId}
           voterName={voterName}
+          currentRound={round}
           onSessionUpdate={(session) => dispatch({ type: "VOTER_SESSION_UPDATE", payload: session })}
         />
       )}
