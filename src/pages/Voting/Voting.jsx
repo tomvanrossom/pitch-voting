@@ -27,7 +27,6 @@ export function Voting() {
       />
 
       <VotingInfoPanel
-        remainingCandidates={candidates}
         eliminatedCandidates={eliminatedHistory}
       />
     </section>

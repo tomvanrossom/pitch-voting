@@ -2,9 +2,6 @@
 
 .voting-info-panel {
   margin: $spacing-lg 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: $spacing-md;
 
   &__section {
     margin-bottom: 0;
