@@ -43,7 +43,7 @@ export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
       <Stack spacing={3}>
         <Typography variant="h5">Host Dashboard</Typography>
 
-        <Collapse in={!allJoined || session.stage !== 'setup'}>
+        <Collapse in={session.stage === 'setup' && !allJoined}>
           <Box
             sx={{
               textAlign: 'center',
