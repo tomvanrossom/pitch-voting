@@ -32,22 +32,36 @@ export function ResultsTable({ historyData, allOptions, winner }) {
             </tr>
           </thead>
           <tbody>
-            {historyData.map((h, idx) => (
-              <tr key={idx} className="results-table__row">
-                <th scope="row" className="results-table__cell">{h.round}</th>
-                {orderedCandidates.map(candidate => (
-                  <td key={candidate} className="results-table__cell">
-                    {h.score && h.score[candidate] !== undefined ? (
-                      candidate === h.eliminated ? (
-                        <Chip label={h.score[candidate]} color="error" size="small" />
-                      ) : (
-                        h.score[candidate]
-                      )
-                    ) : "-"}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {historyData.map((h, idx) => {
+              // Find max score for this round (among candidates still in play)
+              const scores = Object.values(h.score || {}).filter(s => s !== null && s !== undefined);
+              const maxScore = scores.length > 0 ? Math.max(...scores) : null;
+
+              return (
+                <tr key={idx} className="results-table__row">
+                  <th scope="row" className="results-table__cell">{h.round}</th>
+                  {orderedCandidates.map(candidate => {
+                    const score = h.score?.[candidate];
+                    const isEliminated = candidate === h.eliminated;
+                    const isLeader = score !== null && score !== undefined && score === maxScore;
+
+                    return (
+                      <td key={candidate} className="results-table__cell">
+                        {score !== null && score !== undefined ? (
+                          isEliminated ? (
+                            <Chip label={score} color="error" size="small" />
+                          ) : isLeader ? (
+                            <Chip label={score} color="success" size="small" />
+                          ) : (
+                            score
+                          )
+                        ) : "-"}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
             <tr className="results-table__row">
               <th scope="row" className="results-table__cell"><strong>{t('results.winner')}</strong></th>
               {orderedCandidates.map(candidate => (

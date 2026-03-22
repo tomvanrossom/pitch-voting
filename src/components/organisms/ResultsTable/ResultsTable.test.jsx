@@ -98,4 +98,32 @@ describe('ResultsTable', () => {
     expect(headers[2]).toHaveTextContent('Bob')    // eliminated round 2
     expect(headers[3]).toHaveTextContent('Charlie') // winner (last)
   })
+
+  test('shows leader score with success chip', () => {
+    render(<ResultsTable historyData={mockHistoryData} allOptions={allOptions} winner={winner} />)
+
+    // Charlie had highest score in round 1 (7) and round 2 (6)
+    const charlieRound1Chip = screen.getByText('7')
+    expect(charlieRound1Chip.closest('.chip')).toHaveClass('chip--success')
+
+    const charlieRound2Chip = screen.getByText('6')
+    expect(charlieRound2Chip.closest('.chip')).toHaveClass('chip--success')
+  })
+
+  test('shows multiple leaders when scores are tied', () => {
+    // Round 1: Alice eliminated (3), Bob and Charlie tied for lead (7)
+    const tiedHistoryData = [
+      { round: 1, eliminated: 'Alice', score: { Alice: 3, Bob: 7, Charlie: 7 } },
+      { round: 2, eliminated: 'Bob', score: { Alice: null, Bob: 4, Charlie: 6 } }
+    ]
+
+    render(<ResultsTable historyData={tiedHistoryData} allOptions={allOptions} winner={winner} />)
+
+    // In round 1, both Bob and Charlie have score 7 (tied leaders)
+    const leaderChips = screen.getAllByText('7')
+    expect(leaderChips).toHaveLength(2)
+    leaderChips.forEach(chip => {
+      expect(chip.closest('.chip')).toHaveClass('chip--success')
+    })
+  })
 })
