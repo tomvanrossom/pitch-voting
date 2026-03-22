@@ -47,7 +47,7 @@
     "resultsWillAppear": "Resultaten verschijnen automatisch wanneer onthuld."
   },
   "eliminated": {
-    "eliminatedThisRound": "Afgevallen deze ronde:",
+    "loserThisRound": "De verliezer van deze ronde:",
     "nextRound": "Volgende Ronde",
     "waitingForHost": "Wachten tot host volgende ronde start..."
   },

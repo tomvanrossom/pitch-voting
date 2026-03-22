@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Typography, CircularProgress, Stack } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { useVoting } from '../../context/votingContext.jsx';
 import { Alert } from '../../components/molecules/Alert/Alert';
 import { Button } from '../../components/atoms/Button/Button';
@@ -8,6 +9,7 @@ import { getSessionById } from '../../services/sessionService';
 import './Eliminated.scss';
 
 export function Eliminated() {
+  const { t } = useTranslation();
   const { state, dispatch } = useVoting();
   const { loser, round, isHost, sessionId } = state;
 
@@ -38,7 +40,7 @@ export function Eliminated() {
         Round Result
       </Heading>
       <Alert variant="warning">
-        Eliminated this round: <strong>{loser}</strong>
+        {t('eliminated.loserThisRound')} <strong>{loser}</strong>
       </Alert>
       {isHost ? (
         <Button
@@ -47,13 +49,13 @@ export function Eliminated() {
           size="large"
           aria-label={`Proceed to round ${round + 1} of voting`}
         >
-          Next Round
+          {t('eliminated.nextRound')}
         </Button>
       ) : (
         <Stack spacing={2} alignItems="center" sx={{ mt: 2 }}>
           <CircularProgress size={24} />
           <Typography color="text.secondary">
-            Waiting for host to start next round...
+            {t('eliminated.waitingForHost')}
           </Typography>
         </Stack>
       )}

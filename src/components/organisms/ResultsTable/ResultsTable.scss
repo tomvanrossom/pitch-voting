@@ -26,14 +26,6 @@
     &:hover {
       background-color: $color-primary-lighter;
     }
-
-    &--eliminated {
-      background-color: rgba(211, 47, 47, 0.08);
-    }
-
-    &--winner {
-      background-color: rgba(46, 125, 50, 0.12);
-    }
   }
   
   &__cell {

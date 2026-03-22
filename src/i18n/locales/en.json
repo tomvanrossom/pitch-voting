@@ -47,7 +47,7 @@
     "resultsWillAppear": "Results will appear automatically when revealed."
   },
   "eliminated": {
-    "eliminatedThisRound": "Eliminated this round:",
+    "loserThisRound": "The loser of this round:",
     "nextRound": "Next Round",
     "waitingForHost": "Waiting for host to start next round..."
   },

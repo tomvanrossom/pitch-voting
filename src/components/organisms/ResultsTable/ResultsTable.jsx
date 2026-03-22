@@ -15,37 +15,36 @@ export function ResultsTable({ historyData, allOptions, winner }) {
               <th scope="col" className="results-table__cell results-table__cell--header">
                 Round
               </th>
-              <th scope="col" className="results-table__cell results-table__cell--header">
-                Eliminated
-              </th>
               {allOptions.map(c => (
                 <th scope="col" key={c} className="results-table__cell results-table__cell--header">
-                  Score: {c}
+                  {c}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {historyData.map((h, idx) => (
-              <tr key={idx} className="results-table__row results-table__row--eliminated">
+              <tr key={idx} className="results-table__row">
                 <th scope="row" className="results-table__cell">{h.round}</th>
-                <td className="results-table__cell">
-                  <Chip label={h.eliminated} color="error" size="small" />
-                </td>
                 {allOptions.map(b => (
                   <td key={b} className="results-table__cell">
-                    {h.score && h.score[b] !== undefined ? h.score[b] : "-"}
+                    {h.score && h.score[b] !== undefined ? (
+                      b === h.eliminated ? (
+                        <Chip label={h.score[b]} color="error" size="small" />
+                      ) : (
+                        h.score[b]
+                      )
+                    ) : "-"}
                   </td>
                 ))}
               </tr>
             ))}
-            <tr className="results-table__row results-table__row--winner">
+            <tr className="results-table__row">
               <th scope="row" className="results-table__cell"><strong>Winner</strong></th>
-              <td className="results-table__cell">
-                <Chip label={winner} color="success" size="small" />
-              </td>
               {allOptions.map(b => (
-                <td key={b} className="results-table__cell"></td>
+                <td key={b} className="results-table__cell">
+                  {b === winner && <Chip label="🏆" color="success" size="small" />}
+                </td>
               ))}
             </tr>
           </tbody>
