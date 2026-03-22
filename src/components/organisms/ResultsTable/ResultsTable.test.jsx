@@ -87,4 +87,15 @@ describe('ResultsTable', () => {
 
     expect(screen.getByText('Round-by-round elimination results')).toBeInTheDocument()
   })
+
+  test('orders columns by elimination sequence with winner last', () => {
+    render(<ResultsTable historyData={mockHistoryData} allOptions={allOptions} winner={winner} />)
+
+    const headers = screen.getAllByRole('columnheader')
+    // First header is "Round", then eliminated in order, then winner
+    expect(headers[0]).toHaveTextContent('Round')
+    expect(headers[1]).toHaveTextContent('Alice')  // eliminated round 1
+    expect(headers[2]).toHaveTextContent('Bob')    // eliminated round 2
+    expect(headers[3]).toHaveTextContent('Charlie') // winner (last)
+  })
 })
