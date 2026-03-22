@@ -7,19 +7,40 @@
     "joinSession": "Sessie Deelnemen"
   },
   "createSession": {
-    "title": "Sessie Aanmaken",
-    "votersLabel": "Stemmers",
-    "votersPlaceholder": "Voeg stemmer toe",
-    "candidatesLabel": "Kandidaten",
-    "candidatesPlaceholder": "Voeg kandidaat toe",
-    "createButton": "Sessie Aanmaken"
+    "title": "Stemsessie Aanmaken",
+    "votersLabel": "Stemmers (komma-gescheiden)",
+    "votersPlaceholder": "Alice, Bob, Charlie",
+    "candidatesLabel": "Kandidaten (komma-gescheiden)",
+    "candidatesPlaceholder": "Optie A, Optie B, Optie C",
+    "createButton": "Sessie Aanmaken",
+    "creating": "Aanmaken...",
+    "minVotersError": "Minimaal 2 stemmers vereist",
+    "minCandidatesError": "Minimaal 2 kandidaten vereist"
   },
   "joinSession": {
-    "title": "Sessie Deelnemen",
-    "codePlaceholder": "Voer sessiecode in",
+    "title": "Stemsessie Deelnemen",
+    "codePlaceholder": "ABC123",
     "codeLabel": "Sessiecode",
-    "selectVoter": "Selecteer je naam",
-    "joinButton": "Deelnemen"
+    "selectVoter": "Selecteer Je Naam",
+    "joinButton": "Deelnemen",
+    "sessionNotFound": "Sessie niet gevonden. Controleer de code.",
+    "lookingUp": "Zoeken...",
+    "findSession": "Sessie Zoeken"
+  },
+  "stageInfo": {
+    "welcome": "Welkom",
+    "createSession": "Stemsessie aanmaken",
+    "joinSession": "Sessie deelnemen",
+    "waitingAs": "Wachten als {{name}}",
+    "hostingSession": "Sessie {{code}} hosten",
+    "configure": "Stemsessie configureren",
+    "setup": "Stemming instellen",
+    "round": "Ronde {{round}}",
+    "votingRound": "Stemronde {{round}}",
+    "voteSubmitted": "Stem ingediend",
+    "announce": "Resultaten voorbereiden",
+    "eliminated": "{{loser}} is afgevallen",
+    "winner": "{{winner}} is de winnaar"
   },
   "lobby": {
     "welcome": "Welkom, {{name}}!",

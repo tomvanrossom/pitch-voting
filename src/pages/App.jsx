@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useVoting } from "../context/votingContext.jsx";
 import { VotingLayout } from "../components/templates/VotingLayout/VotingLayout";
 import { Configure } from "./Configure";
@@ -12,21 +13,27 @@ import { JoinSession } from "./JoinSession";
 import { HostDashboard } from "./HostDashboard";
 import { Lobby } from "./Lobby";
 import { VoterWaiting } from "./VoterWaiting";
-import { Button, Stack, Typography, Card } from "@mui/material";
+import { Card } from "../components/molecules/Card/Card";
+import { Button } from "../components/atoms/Button/Button";
+import "./App.scss";
 
 function Home({ onHost, onJoin }) {
+  const { t } = useTranslation();
   return (
     <Card>
-      <Typography variant="h5" gutterBottom align="center">Ranked Choice Voting</Typography>
-      <Stack spacing={2}>
-        <Button variant="contained" onClick={onHost} fullWidth>Host a Session</Button>
-        <Button variant="outlined" onClick={onJoin} fullWidth>Join a Session</Button>
-      </Stack>
+      <div className="home">
+        <h1 className="home__title">{t('app.title')}</h1>
+        <div className="home__actions">
+          <Button variant="primary" onClick={onHost} fullWidth>{t('home.hostSession')}</Button>
+          <Button variant="secondary" onClick={onJoin} fullWidth>{t('home.joinSession')}</Button>
+        </div>
+      </div>
     </Card>
   );
 }
 
 export default function App() {
+  const { t } = useTranslation();
   const { state, dispatch } = useVoting();
   const { stage, round, currentBallot, loser, winner, isHost, voterName, session } = state;
   const [joinCode, setJoinCode] = useState(null);
@@ -47,18 +54,18 @@ export default function App() {
   }, [dispatch]);
 
   const getStageInfo = () => {
-    if (stage === "home") return "Welcome";
-    if (stage === "createSession") return "Create a voting session";
-    if (stage === "joinSession") return "Join a session";
-    if (stage === "lobby") return `Waiting as ${voterName}`;
-    if (stage === "hostDashboard") return `Hosting session ${session?.code}`;
-    if (stage === "configure") return "Configure voting session";
-    if (stage === "setup") return "Voting setup screen";
-    if (stage === "voting") return isHost ? `Round ${round}` : `Voting round ${round}`;
-    if (stage === "voterSubmitted") return "Vote submitted";
-    if (stage === "announce") return "Preparing to reveal results";
-    if (stage === "eliminated") return `${loser} has been eliminated`;
-    if (stage === "winner") return `${winner} is the winner`;
+    if (stage === "home") return t('stageInfo.welcome');
+    if (stage === "createSession") return t('stageInfo.createSession');
+    if (stage === "joinSession") return t('stageInfo.joinSession');
+    if (stage === "lobby") return t('stageInfo.waitingAs', { name: voterName });
+    if (stage === "hostDashboard") return t('stageInfo.hostingSession', { code: session?.code });
+    if (stage === "configure") return t('stageInfo.configure');
+    if (stage === "setup") return t('stageInfo.setup');
+    if (stage === "voting") return isHost ? t('stageInfo.round', { round }) : t('stageInfo.votingRound', { round });
+    if (stage === "voterSubmitted") return t('stageInfo.voteSubmitted');
+    if (stage === "announce") return t('stageInfo.announce');
+    if (stage === "eliminated") return t('stageInfo.eliminated', { loser });
+    if (stage === "winner") return t('stageInfo.winner', { winner });
     return "";
   };
 

@@ -3,6 +3,25 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { JoinSession } from './JoinSession'
 
+// Mock i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key) => {
+      const translations = {
+        'joinSession.title': 'Join Voting Session',
+        'joinSession.codeLabel': 'Session Code',
+        'joinSession.codePlaceholder': 'ABC123',
+        'joinSession.findSession': 'Find Session',
+        'joinSession.lookingUp': 'Looking up...',
+        'joinSession.selectVoter': 'Select Your Name',
+        'joinSession.joinButton': 'Join Session',
+        'joinSession.sessionNotFound': 'Session not found. Check your code.'
+      }
+      return translations[key] || key
+    }
+  })
+}))
+
 // Mock the session service
 vi.mock('../../services/sessionService', () => ({
   joinSession: vi.fn()

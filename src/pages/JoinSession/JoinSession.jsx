@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { TextField, Button, Typography, Stack } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { joinSession } from '../../services/sessionService'
 import { Card } from '../../components/molecules/Card/Card'
 import { VoterChip } from '../../components/molecules/VoterChip'
 
 export function JoinSession({ onSessionJoined, initialCode = '' }) {
+  const { t } = useTranslation()
   const [code, setCode] = useState(initialCode)
   const [session, setSession] = useState(null)
   const [selectedVoter, setSelectedVoter] = useState('')
@@ -20,11 +22,11 @@ export function JoinSession({ onSessionJoined, initialCode = '' }) {
       setLoading(true)
       joinSession(initialCode)
         .then(found => { if (!cancelled) setSession(found) })
-        .catch(() => { if (!cancelled) setError('Session not found. Check your code.') })
+        .catch(() => { if (!cancelled) setError(t('joinSession.sessionNotFound')) })
         .finally(() => { if (!cancelled) setLoading(false) })
       return () => { cancelled = true }
     }
-  }, [initialCode])
+  }, [initialCode, t])
 
   const handleLookup = async (e) => {
     e.preventDefault()
@@ -35,7 +37,7 @@ export function JoinSession({ onSessionJoined, initialCode = '' }) {
       const found = await joinSession(code)
       setSession(found)
     } catch (err) {
-      setError('Session not found. Check your code.')
+      setError(t('joinSession.sessionNotFound'))
     } finally {
       setLoading(false)
     }
@@ -53,7 +55,7 @@ export function JoinSession({ onSessionJoined, initialCode = '' }) {
   if (session) {
     return (
       <Card>
-        <Typography variant="h5" gutterBottom>Select Your Name</Typography>
+        <Typography variant="h5" gutterBottom>{t('joinSession.selectVoter')}</Typography>
         <Stack spacing={2}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
             {session.voters.map(voter => (
@@ -66,7 +68,7 @@ export function JoinSession({ onSessionJoined, initialCode = '' }) {
             ))}
           </div>
           <Button variant="contained" onClick={handleJoin} disabled={!selectedVoter} fullWidth>
-            Join Session
+            {t('joinSession.joinButton')}
           </Button>
         </Stack>
       </Card>
@@ -75,21 +77,21 @@ export function JoinSession({ onSessionJoined, initialCode = '' }) {
 
   return (
     <Card>
-      <Typography variant="h5" gutterBottom>Join Voting Session</Typography>
+      <Typography variant="h5" gutterBottom>{t('joinSession.title')}</Typography>
       <form onSubmit={handleLookup}>
         <Stack spacing={2}>
           <TextField
-            label="Session Code"
+            label={t('joinSession.codeLabel')}
             value={code}
             onChange={(e) => setCode(e.target.value.toUpperCase())}
-            placeholder="ABC123"
+            placeholder={t('joinSession.codePlaceholder')}
             inputProps={{ maxLength: 6, style: { textTransform: 'uppercase' } }}
             fullWidth
             required
           />
-          {error && <Typography color="error">{error}</Typography>}
+          {error && <Typography color="error" role="alert">{error}</Typography>}
           <Button type="submit" variant="contained" disabled={loading} fullWidth>
-            {loading ? 'Looking up...' : 'Find Session'}
+            {loading ? t('joinSession.lookingUp') : t('joinSession.findSession')}
           </Button>
         </Stack>
       </form>

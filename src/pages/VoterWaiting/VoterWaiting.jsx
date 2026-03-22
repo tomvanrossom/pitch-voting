@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, CircularProgress, Stack } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { Card } from '../../components/molecules/Card/Card'
 import { getSessionById } from '../../services/sessionService'
+import './VoterWaiting.scss'
 
 export function VoterWaiting({ sessionId, voterName, currentRound, onSessionUpdate }) {
+  const { t } = useTranslation()
   const [polling, setPolling] = useState(true)
 
   useEffect(() => {
@@ -36,16 +38,16 @@ export function VoterWaiting({ sessionId, voterName, currentRound, onSessionUpda
 
   return (
     <Card>
-      <Stack spacing={2} alignItems="center">
-        <Typography variant="h5">Vote Submitted!</Typography>
-        <CircularProgress size={32} />
-        <Typography color="text.secondary">
-          Waiting for other voters, {voterName}...
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Results will appear automatically when revealed.
-        </Typography>
-      </Stack>
+      <div className="voter-waiting">
+        <h2 className="voter-waiting__title">{t('voterWaiting.submitted')}</h2>
+        <div className="voter-waiting__spinner" aria-hidden="true" />
+        <p className="voter-waiting__status">
+          {t('voterWaiting.waiting', { name: voterName })}
+        </p>
+        <p className="voter-waiting__info">
+          {t('voterWaiting.resultsWillAppear')}
+        </p>
+      </div>
     </Card>
   )
 }

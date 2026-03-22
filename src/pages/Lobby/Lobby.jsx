@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, CircularProgress, Stack } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { Card } from '../../components/molecules/Card/Card'
 import { getSessionById, registerVoterJoined } from '../../services/sessionService'
+import './Lobby.scss'
 
 export function Lobby({ sessionId, voterName, onSessionStart }) {
+  const { t } = useTranslation()
   const [session, setSession] = useState(null)
 
   // Register voter as joined when entering lobby
@@ -33,16 +35,16 @@ export function Lobby({ sessionId, voterName, onSessionStart }) {
 
   return (
     <Card>
-      <Stack spacing={2} alignItems="center">
-        <Typography variant="h5">Welcome, {voterName}!</Typography>
-        <CircularProgress />
-        <Typography color="text.secondary">Waiting for host to start voting...</Typography>
+      <div className="lobby">
+        <h2 className="lobby__title">{t('lobby.welcome', { name: voterName })}</h2>
+        <div className="lobby__spinner" aria-hidden="true" />
+        <p className="lobby__status">{t('lobby.waiting')}</p>
         {session && (
-          <Typography variant="body2">
-            {session.voters.length} voters, {session.candidates.length} candidates
-          </Typography>
+          <p className="lobby__info">
+            {t('lobby.votersAndCandidates', { voters: session.voters.length, candidates: session.candidates.length })}
+          </p>
         )}
-      </Stack>
+      </div>
     </Card>
   )
 }

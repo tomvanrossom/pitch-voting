@@ -7,19 +7,40 @@
     "joinSession": "Join a Session"
   },
   "createSession": {
-    "title": "Create Session",
-    "votersLabel": "Voters",
-    "votersPlaceholder": "Add voter name",
-    "candidatesLabel": "Candidates",
-    "candidatesPlaceholder": "Add candidate name",
-    "createButton": "Create Session"
+    "title": "Create Voting Session",
+    "votersLabel": "Voters (comma-separated)",
+    "votersPlaceholder": "Alice, Bob, Charlie",
+    "candidatesLabel": "Candidates (comma-separated)",
+    "candidatesPlaceholder": "Option A, Option B, Option C",
+    "createButton": "Create Session",
+    "creating": "Creating...",
+    "minVotersError": "At least 2 voters required",
+    "minCandidatesError": "At least 2 candidates required"
   },
   "joinSession": {
-    "title": "Join Session",
-    "codePlaceholder": "Enter session code",
+    "title": "Join Voting Session",
+    "codePlaceholder": "ABC123",
     "codeLabel": "Session Code",
-    "selectVoter": "Select your name",
-    "joinButton": "Join Session"
+    "selectVoter": "Select Your Name",
+    "joinButton": "Join Session",
+    "sessionNotFound": "Session not found. Check your code.",
+    "lookingUp": "Looking up...",
+    "findSession": "Find Session"
+  },
+  "stageInfo": {
+    "welcome": "Welcome",
+    "createSession": "Create a voting session",
+    "joinSession": "Join a session",
+    "waitingAs": "Waiting as {{name}}",
+    "hostingSession": "Hosting session {{code}}",
+    "configure": "Configure voting session",
+    "setup": "Voting setup screen",
+    "round": "Round {{round}}",
+    "votingRound": "Voting round {{round}}",
+    "voteSubmitted": "Vote submitted",
+    "announce": "Preparing to reveal results",
+    "eliminated": "{{loser}} has been eliminated",
+    "winner": "{{winner}} is the winner"
   },
   "lobby": {
     "welcome": "Welcome, {{name}}!",

@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Box, TextField, Button, Typography, Stack } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { createSession } from '../../services/sessionService'
 import { Card } from '../../components/molecules/Card/Card'
 
 export function CreateSession({ onSessionCreated }) {
+  const { t } = useTranslation()
   const [voters, setVoters] = useState('')
   const [candidates, setCandidates] = useState('')
   const [error, setError] = useState(null)
@@ -19,10 +21,10 @@ export function CreateSession({ onSessionCreated }) {
       const candidateList = candidates.split(',').map(c => c.trim()).filter(Boolean)
 
       if (voterList.length < 2) {
-        throw new Error('At least 2 voters required')
+        throw new Error(t('createSession.minVotersError'))
       }
       if (candidateList.length < 2) {
-        throw new Error('At least 2 candidates required')
+        throw new Error(t('createSession.minCandidatesError'))
       }
 
       const { session, hostToken } = await createSession(voterList, candidateList)
@@ -37,28 +39,28 @@ export function CreateSession({ onSessionCreated }) {
 
   return (
     <Card>
-      <Typography variant="h5" gutterBottom>Create Voting Session</Typography>
+      <Typography variant="h5" gutterBottom>{t('createSession.title')}</Typography>
       <form onSubmit={handleSubmit}>
         <Stack spacing={2}>
           <TextField
-            label="Voters (comma-separated)"
+            label={t('createSession.votersLabel')}
             value={voters}
             onChange={(e) => setVoters(e.target.value)}
-            placeholder="Alice, Bob, Charlie"
+            placeholder={t('createSession.votersPlaceholder')}
             fullWidth
             required
           />
           <TextField
-            label="Candidates (comma-separated)"
+            label={t('createSession.candidatesLabel')}
             value={candidates}
             onChange={(e) => setCandidates(e.target.value)}
-            placeholder="Option A, Option B, Option C"
+            placeholder={t('createSession.candidatesPlaceholder')}
             fullWidth
             required
           />
-          {error && <Typography color="error">{error}</Typography>}
+          {error && <Typography color="error" role="alert">{error}</Typography>}
           <Button type="submit" variant="contained" disabled={loading} fullWidth>
-            {loading ? 'Creating...' : 'Create Session'}
+            {loading ? t('createSession.creating') : t('createSession.createButton')}
           </Button>
         </Stack>
       </form>
