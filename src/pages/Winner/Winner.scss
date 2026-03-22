@@ -18,7 +18,38 @@
   &__summary-title {
     font-size: $font-size-lg;
     font-weight: $font-weight-medium;
-    margin-bottom: $spacing-md;
-    text-align: center;
+    margin: 0;
+  }
+
+  &__summary-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: $radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-gray-100;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $color-primary;
+      outline-offset: 2px;
+    }
+  }
+
+  &__summary-icon {
+    font-size: $font-size-sm;
+    transition: transform $transition-fast;
+
+    &--expanded {
+      transform: rotate(180deg);
+    }
   }
 }

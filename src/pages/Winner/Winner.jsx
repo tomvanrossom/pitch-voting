@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Collapse, Box, IconButton } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import React, { useState, useEffect, useRef } from 'react';
+import { Collapse } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { useVoting } from '../../context/votingContext.jsx';
 import { Alert } from '../../components/molecules/Alert/Alert';
 import { Heading } from '../../components/atoms/Heading/Heading';
@@ -9,9 +9,16 @@ import { ResultsTable } from '../../components/organisms/ResultsTable/ResultsTab
 import './Winner.scss';
 
 export function Winner() {
+  const { t } = useTranslation();
   const { state } = useVoting();
   const { winner, eliminatedHistory, scoreHistory, candidates, session } = state;
   const [expanded, setExpanded] = useState(false);
+  const headingRef = useRef(null);
+
+  // Focus heading on mount for screen reader announcement
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
 
   // Use original candidates list from session, or reconstruct from eliminated + current
   const allCandidates = session?.candidates || [...new Set([...eliminatedHistory, ...candidates])];
@@ -22,50 +29,49 @@ export function Winner() {
     score: scoreHistory[idx],
   }));
 
+  const handleToggle = () => setExpanded(!expanded);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setExpanded(!expanded);
+    }
+  };
+
   return (
     <article className="winner" aria-labelledby="winner-heading">
-      <Heading level={2} id="winner-heading" className="sr-only">
-        Final Results
+      <Heading level={2} id="winner-heading" className="sr-only" ref={headingRef} tabIndex={-1}>
+        {t('winner.finalResults')}
       </Heading>
 
       <Alert variant="success">
-        <Icon emoji="🏆" label="trophy" /> <strong>Winner: {winner}</strong>
+        <Icon emoji="🏆" label="trophy" /> <strong>{t('winner.theWinnerIs')} {winner}</strong>
       </Alert>
 
       <section className="winner__summary" aria-labelledby="summary-title">
-        <Box
-          role="button"
-          tabIndex={0}
-          onClick={() => setExpanded(!expanded)}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setExpanded(!expanded) }}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer',
-            userSelect: 'none',
-          }}
+        <button
+          type="button"
+          className="winner__summary-toggle"
+          onClick={handleToggle}
+          onKeyDown={handleKeyDown}
+          aria-expanded={expanded}
+          aria-controls="results-table"
         >
           <Heading level={3} id="summary-title" className="winner__summary-title">
-            Voting summary
+            {t('winner.votingSummary')}
           </Heading>
-          <IconButton
-            size="small"
-            sx={{
-              ml: 1,
-              transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 0.2s',
-            }}
-            aria-label={expanded ? 'Collapse summary' : 'Expand summary'}
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </Box>
+          <span className={`winner__summary-icon ${expanded ? 'winner__summary-icon--expanded' : ''}`}>
+            ▼
+          </span>
+        </button>
         <Collapse in={expanded}>
-          <ResultsTable
-            historyData={historyArr}
-            allOptions={allCandidates}
-            winner={winner}
-          />
+          <div id="results-table">
+            <ResultsTable
+              historyData={historyArr}
+              allOptions={allCandidates}
+              winner={winner}
+            />
+          </div>
         </Collapse>
       </section>
     </article>

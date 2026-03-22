@@ -1,23 +1,26 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Chip } from '../../atoms/Chip/Chip';
 import './ResultsTable.scss';
 
 export function ResultsTable({ historyData, allOptions, winner }) {
+  const { t } = useTranslation();
+
   return (
     <div className="results-table">
       <div className="results-table__container">
         <table className="results-table__table">
           <caption className="sr-only">
-            Round-by-round elimination results and weighted scores for each candidate
+            {t('results.caption')}
           </caption>
           <thead className="results-table__header">
             <tr className="results-table__row">
               <th scope="col" className="results-table__cell results-table__cell--header">
-                Round
+                {t('results.round')}
               </th>
-              {allOptions.map(c => (
-                <th scope="col" key={c} className="results-table__cell results-table__cell--header">
-                  {c}
+              {allOptions.map(candidate => (
+                <th scope="col" key={candidate} className="results-table__cell results-table__cell--header">
+                  {candidate}
                 </th>
               ))}
             </tr>
@@ -26,13 +29,13 @@ export function ResultsTable({ historyData, allOptions, winner }) {
             {historyData.map((h, idx) => (
               <tr key={idx} className="results-table__row">
                 <th scope="row" className="results-table__cell">{h.round}</th>
-                {allOptions.map(b => (
-                  <td key={b} className="results-table__cell">
-                    {h.score && h.score[b] !== undefined ? (
-                      b === h.eliminated ? (
-                        <Chip label={h.score[b]} color="error" size="small" />
+                {allOptions.map(candidate => (
+                  <td key={candidate} className="results-table__cell">
+                    {h.score && h.score[candidate] !== undefined ? (
+                      candidate === h.eliminated ? (
+                        <Chip label={h.score[candidate]} color="error" size="small" />
                       ) : (
-                        h.score[b]
+                        h.score[candidate]
                       )
                     ) : "-"}
                   </td>
@@ -40,10 +43,10 @@ export function ResultsTable({ historyData, allOptions, winner }) {
               </tr>
             ))}
             <tr className="results-table__row">
-              <th scope="row" className="results-table__cell"><strong>Winner</strong></th>
-              {allOptions.map(b => (
-                <td key={b} className="results-table__cell">
-                  {b === winner && <Chip label="🏆" color="success" size="small" />}
+              <th scope="row" className="results-table__cell"><strong>{t('results.winner')}</strong></th>
+              {allOptions.map(candidate => (
+                <td key={candidate} className="results-table__cell">
+                  {candidate === winner && <Chip label="🏆" color="success" size="small" />}
                 </td>
               ))}
             </tr>

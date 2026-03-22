@@ -3,12 +3,14 @@ import { Typography, Stack, Button, List, ListItem, ListItemIcon, ListItemText, 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import PersonIcon from '@mui/icons-material/Person'
+import { useTranslation } from 'react-i18next'
 import { Card } from '../../components/molecules/Card/Card'
 import { useRealtimeBallots } from '../../hooks/useRealtimeBallots'
 import { QRCodeDisplay } from '../../components/molecules/QRCodeDisplay'
 import { getSessionById } from '../../services/sessionService'
 
 export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
+  const { t } = useTranslation()
   const isVoting = session.stage === 'voting'
   const { ballotCount, votersSubmitted, reset } = useRealtimeBallots(session.id, isVoting)
   const [joinedVoters, setJoinedVoters] = useState(session.joined_voters || [])
@@ -41,7 +43,7 @@ export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
   return (
     <Card>
       <Stack spacing={3}>
-        <Typography variant="h5">Host Dashboard</Typography>
+        <Typography variant="h5">{t('hostDashboard.title')}</Typography>
 
         <Collapse in={session.stage === 'setup' && !allJoined}>
           <Box
@@ -57,7 +59,7 @@ export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
               baseUrl={window.location.origin + import.meta.env.BASE_URL}
             />
             <Typography sx={{ mt: 1 }}>
-              Scan to join or enter: <strong>{session.code}</strong>
+              {t('hostDashboard.scanToJoin')} <strong>{session.code}</strong>
             </Typography>
           </Box>
         </Collapse>
@@ -67,7 +69,7 @@ export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
             <Box>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 <PersonIcon fontSize="small" sx={{ verticalAlign: 'middle', mr: 0.5 }} />
-                Joined ({joinedVoters.length}/{session.voters.length})
+                {t('hostDashboard.joined')} ({joinedVoters.length}/{session.voters.length})
               </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                 {session.voters.map(voter => {
@@ -85,14 +87,14 @@ export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
               </Stack>
             </Box>
             <Button variant="contained" onClick={onStartVoting} fullWidth>
-              Start Voting (Round {session.round})
+              {t('hostDashboard.startVoting', { round: session.round })}
             </Button>
           </>
         )}
 
         {isVoting && (
           <>
-            <Typography variant="h6">Round {session.round} - Waiting for votes</Typography>
+            <Typography variant="h6">{t('hostDashboard.roundWaiting', { round: session.round })}</Typography>
             <List>
               {session.voters.map(voter => {
                 const hasVoted = votersSubmitted.includes(voter)
@@ -106,9 +108,9 @@ export function HostDashboard({ session, hostToken, onReveal, onStartVoting }) {
                 )
               })}
             </List>
-            <Typography>{ballotCount}/{session.voters.length} votes received</Typography>
+            <Typography>{t('hostDashboard.votesReceived', { count: ballotCount, total: session.voters.length })}</Typography>
             <Button variant="contained" onClick={onReveal} disabled={!allVotesIn} fullWidth>
-              {allVotesIn ? 'Reveal Result' : 'Waiting for all votes...'}
+              {allVotesIn ? t('hostDashboard.revealResult') : t('hostDashboard.waitingForVotes')}
             </Button>
           </>
         )}

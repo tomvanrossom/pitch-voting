@@ -4,9 +4,37 @@
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
-  
+
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
   align-items: center;
+
+  &__waiting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-top: $spacing-md;
+  }
+
+  &__spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid $color-gray-200;
+    border-top-color: $color-primary;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  &__waiting-text {
+    color: $color-text-secondary;
+    margin: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

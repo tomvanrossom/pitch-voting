@@ -1,22 +1,28 @@
+@use '../../../styles/tokens' as *;
+
 .tap-rank-ballot {
   &__instruction {
-    color: #666;
-    margin-bottom: 16px;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-md;
   }
 
   &__chips {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  &__error-container {
+    min-height: 0;
   }
 
   &__error {
-    background: #ffebee;
-    color: #c62828;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 16px;
+    background: $color-error-bg;
+    color: $color-error;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-md;
     text-align: center;
   }
 }

@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { Typography, CircularProgress, Stack } from '@mui/material';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useVoting } from '../../context/votingContext.jsx';
 import { Alert } from '../../components/molecules/Alert/Alert';
@@ -12,6 +11,12 @@ export function Eliminated() {
   const { t } = useTranslation();
   const { state, dispatch } = useVoting();
   const { loser, round, isHost, sessionId } = state;
+  const headingRef = useRef(null);
+
+  // Focus heading on mount for screen reader announcement
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
 
   // Voters poll for next round
   useEffect(() => {
@@ -36,8 +41,8 @@ export function Eliminated() {
 
   return (
     <article className="eliminated" aria-labelledby="eliminated-heading">
-      <Heading level={2} id="eliminated-heading" className="sr-only">
-        Round Result
+      <Heading level={2} id="eliminated-heading" className="sr-only" ref={headingRef} tabIndex={-1}>
+        {t('eliminated.roundResult')}
       </Heading>
       <Alert variant="warning">
         {t('eliminated.loserThisRound')} <strong>{loser}</strong>
@@ -47,17 +52,17 @@ export function Eliminated() {
           onClick={handleNextRound}
           variant="primary"
           size="large"
-          aria-label={`Proceed to round ${round + 1} of voting`}
+          aria-label={t('eliminated.proceedToRound', { round: round + 1 })}
         >
           {t('eliminated.nextRound')}
         </Button>
       ) : (
-        <Stack spacing={2} alignItems="center" sx={{ mt: 2 }}>
-          <CircularProgress size={24} />
-          <Typography color="text.secondary">
+        <div className="eliminated__waiting">
+          <div className="eliminated__spinner" aria-hidden="true" />
+          <p className="eliminated__waiting-text">
             {t('eliminated.waitingForHost')}
-          </Typography>
-        </Stack>
+          </p>
+        </div>
       )}
     </article>
   );

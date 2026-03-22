@@ -39,7 +39,9 @@
   "voting": {
     "instruction": "Tik kandidaten aan in volgorde van voorkeur",
     "submitBallot": "Stem Indienen",
-    "submitting": "Indienen..."
+    "submitting": "Indienen...",
+    "rankAllCandidates": "Rangschik alle kandidaten",
+    "submitError": "Stem indienen mislukt. Probeer opnieuw."
   },
   "voterWaiting": {
     "submitted": "Stem Ingediend!",
@@ -47,20 +49,25 @@
     "resultsWillAppear": "Resultaten verschijnen automatisch wanneer onthuld."
   },
   "eliminated": {
+    "roundResult": "Ronde Resultaat",
     "loserThisRound": "De verliezer van deze ronde:",
     "nextRound": "Volgende Ronde",
+    "proceedToRound": "Ga naar ronde {{round}} van de stemming",
     "waitingForHost": "Wachten tot host volgende ronde start..."
   },
   "winner": {
-    "theWinnerIs": "De winnaar is:",
+    "finalResults": "Eindresultaten",
+    "theWinnerIs": "Winnaar:",
     "congratulations": "Gefeliciteerd!",
+    "votingSummary": "Stemsamenvatting",
     "viewResults": "Bekijk Resultaten",
     "startNew": "Nieuwe Sessie Starten"
   },
   "results": {
     "title": "Resultaten",
-    "round": "Ronde {{round}}",
-    "eliminated": "Afgevallen"
+    "round": "Ronde",
+    "winner": "Winnaar",
+    "caption": "Ronde-voor-ronde eliminatieresultaten en scores per kandidaat"
   },
   "footer": {
     "resetSession": "Sessie Resetten",

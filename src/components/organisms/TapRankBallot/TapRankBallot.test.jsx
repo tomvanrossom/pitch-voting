@@ -6,6 +6,22 @@ import { TapRankBallot } from './TapRankBallot'
 // Create a shared mock dispatch function
 const mockDispatch = vi.fn()
 
+// Mock i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key) => {
+      const translations = {
+        'voting.instruction': 'Tap candidates in order of preference',
+        'voting.submitBallot': 'Submit Ballot',
+        'voting.submitting': 'Submitting...',
+        'voting.rankAllCandidates': 'Please rank all candidates',
+        'voting.submitError': 'Failed to submit ballot. Please try again.'
+      }
+      return translations[key] || key
+    }
+  })
+}))
+
 // Mock the voting context
 vi.mock('../../../context/votingContext.jsx', () => ({
   useVoting: () => ({
