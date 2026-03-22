@@ -1,7 +1,6 @@
 import React from 'react';
 import { useVoting } from '../../context/votingContext.jsx';
 import { Stepper } from '../../components/organisms/Stepper/Stepper';
-import { VotingInfoPanel } from '../../components/organisms/VotingInfoPanel/VotingInfoPanel';
 import { TapRankBallot } from '../../components/organisms/TapRankBallot';
 import './Voting.scss';
 
@@ -24,10 +23,6 @@ export function Voting() {
         totalRounds={state.candidates.length - 1}
         currentRound={round}
         eliminatedHistory={eliminatedHistory}
-      />
-
-      <VotingInfoPanel
-        eliminatedCandidates={eliminatedHistory}
       />
     </section>
   );
