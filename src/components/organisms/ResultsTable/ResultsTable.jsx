@@ -27,7 +27,7 @@ export function ResultsTable({ historyData, allOptions, winner }) {
           </thead>
           <tbody>
             {historyData.map((h, idx) => (
-              <tr key={idx} className="results-table__row">
+              <tr key={idx} className="results-table__row results-table__row--eliminated">
                 <th scope="row" className="results-table__cell">{h.round}</th>
                 <td className="results-table__cell">
                   <Chip label={h.eliminated} color="error" size="small" />
@@ -39,7 +39,7 @@ export function ResultsTable({ historyData, allOptions, winner }) {
                 ))}
               </tr>
             ))}
-            <tr className="results-table__row">
+            <tr className="results-table__row results-table__row--winner">
               <th scope="row" className="results-table__cell"><strong>Winner</strong></th>
               <td className="results-table__cell">
                 <Chip label={winner} color="success" size="small" />
